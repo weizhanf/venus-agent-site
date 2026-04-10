@@ -1,0 +1,169 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="slides-format" content="viewport"><title>Venus — AI 原生数据处理智能体</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet"><style>
+:root{--bg:#07111f;--bg2:#0c1d35;--panel:#0d1b2fe0;--text:#eaf2ff;--muted:#8ea6c7;--c1:#2fe4ff;--c2:#a95cff;--c3:#ffb020;--c4:#15d08f;--danger:#ff5a8c;--line:rgba(126,180,255,.16);--grid:rgba(72,125,255,.15)}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:var(--bg);font-family:Inter,'PingFang SC','Microsoft YaHei',sans-serif;color:var(--text);overflow:hidden}
+.deck{position:relative;width:100vw;height:100vh}.slide{position:absolute;inset:0;opacity:0;transform:scale(.97);transition:.7s ease;pointer-events:none;overflow:hidden;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#081223 0%,#07111f 100%)}.slide.active{opacity:1;transform:scale(1);pointer-events:auto}
+.slide:before{content:'';position:absolute;inset:0;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:42px 42px;opacity:.1;z-index:0}.slide:after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.35));z-index:1}
+.content{position:relative;z-index:2;width:min(1180px,calc(100vw - 60px));height:min(88vh,820px);padding:24px 26px;display:flex;flex-direction:column;justify-content:center}.mesh,.canvas{position:absolute;inset:0}.mesh{z-index:0}.canvas{z-index:1}.blob{position:absolute;border-radius:50%;filter:blur(88px);animation:f 16s ease-in-out infinite}.blob:nth-child(2){animation-duration:20s}.blob:nth-child(3){animation-duration:22s}@keyframes f{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(55px,-45px) scale(1.08)}66%{transform:translate(-35px,35px) scale(.92)}}
+.top{position:absolute;left:0;right:0;top:0;height:4px;background:linear-gradient(90deg,var(--c1),var(--c2),var(--c1));box-shadow:0 0 14px rgba(47,228,255,.55);z-index:2}.panel,.glass{border:1px solid var(--line);border-radius:20px}.panel{background:linear-gradient(180deg,rgba(16,35,61,.88),rgba(9,22,39,.9));box-shadow:0 0 22px rgba(38,122,255,.08),inset 0 0 0 1px rgba(255,255,255,.02)}.glass{background:rgba(13,27,47,.72)}
+.kicker{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#86baff;font-weight:800}.h1{font-size:clamp(38px,5.2vw,70px);font-weight:900;line-height:1.02;letter-spacing:-.04em}.h2{font-size:clamp(28px,3.4vw,44px);font-weight:850;line-height:1.08;letter-spacing:-.03em}.h3{font-size:20px;font-weight:780}.grad{background:linear-gradient(90deg,#dcecff 0%,#70b9ff 18%,#2fe4ff 45%,#9e74ff 72%,#66deff 100%);-webkit-background-clip:text;background-clip:text;color:transparent}.sub{font-size:14px;line-height:1.7;color:#98acc9}.section{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:16px}.section p{margin:8px 0 0;color:#9fb4d2;max-width:760px;line-height:1.6}
+.pill,.tag{display:inline-flex;align-items:center}.pill{gap:8px;border:1px solid var(--line);border-radius:999px;padding:7px 12px;font-size:12px;color:#b7d6ff;background:rgba(255,255,255,.03)}.tag{padding:5px 10px;border-radius:10px;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}.cyan{color:#8df0ff;border:1px solid rgba(47,228,255,.24);background:rgba(47,228,255,.08)}.purple{color:#d6b2ff;border:1px solid rgba(169,92,255,.24);background:rgba(169,92,255,.09)}.orange{color:#ffd386;border:1px solid rgba(255,176,32,.28);background:rgba(255,176,32,.08)}.green{color:#7effce;border:1px solid rgba(21,208,143,.28);background:rgba(21,208,143,.08)}.red{color:#ff9fc0;border:1px solid rgba(255,90,140,.26);background:rgba(255,90,140,.08)}
+.grid2,.grid3,.grid4{display:grid;gap:16px}.grid2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid3{grid-template-columns:repeat(3,minmax(0,1fr))}.grid4{grid-template-columns:repeat(4,minmax(0,1fr))}.card{padding:18px}.ptitle{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}.card p{margin:8px 0 0;color:#a8bede;line-height:1.55;font-size:14px}.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:24px;align-items:center;padding:34px 36px}.heroBadge{width:128px;height:128px;border-radius:26px;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;font-size:56px;font-weight:900;color:#8fe8ff;border:1px solid rgba(122,215,255,.35);background:radial-gradient(circle at 30% 30%,rgba(47,228,255,.18),rgba(169,92,255,.14) 50%,rgba(0,0,0,.08));box-shadow:0 0 26px rgba(47,228,255,.16),inset 0 0 26px rgba(169,92,255,.18);animation:y 3.2s ease-in-out infinite}@keyframes y{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.list{display:flex;flex-direction:column;gap:12px}.item{display:flex;gap:12px;align-items:flex-start;color:#d2e0f3;line-height:1.55;font-size:15px}.item i{width:9px;height:9px;margin-top:8px;border-radius:2px;background:linear-gradient(90deg,#49dfff,#5f8cff);box-shadow:0 0 12px rgba(73,223,255,.42);flex:0 0 9px}
+.stage{padding:18px 20px;border-radius:20px;border:1px solid rgba(255,255,255,.08)}.sblue{background:linear-gradient(135deg,rgba(34,97,187,.17),rgba(14,32,62,.88))}.spurple{background:linear-gradient(135deg,rgba(126,59,204,.16),rgba(16,27,61,.86))}.sorange{background:linear-gradient(135deg,rgba(186,101,21,.16),rgba(31,22,12,.88))}.sgreen{background:linear-gradient(135deg,rgba(13,102,69,.18),rgba(8,32,31,.9))}.shead{display:flex;gap:14px;align-items:center;margin-bottom:10px}.sicon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.14);font-size:22px}.stitle{font-size:18px;font-weight:800}.ssub{font-size:12px;color:#90a5c3}.mini{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}.line{border-radius:16px;border:1px solid rgba(119,188,255,.14);padding:12px 14px;background:rgba(8,18,31,.36)}
+.metric{padding:18px;min-height:120px}.mval{font-size:34px;font-weight:900;line-height:1}.label{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#7aa6d7}.foot{font-size:12px;color:#7892b5;margin-top:10px}.kv{display:grid;grid-template-columns:110px 1fr;gap:10px;font-size:14px;color:#c8daf3}.kv div:nth-child(odd){color:#89a4c8}
+.code{font-family:'Source Code Pro',monospace;font-size:12px;line-height:1.55;white-space:pre-wrap;padding:12px 14px;background:rgba(5,10,18,.8);border:1px solid rgba(255,255,255,.08);border-radius:14px;color:#eaf5ff}.trace{display:grid;grid-template-columns:120px 1fr;gap:16px;height:100%}.timeline{position:relative;padding-top:16px}.timeline:before{content:'';position:absolute;top:26px;bottom:26px;left:58px;width:2px;background:linear-gradient(180deg,var(--c1),var(--c2),var(--c3),var(--c4));box-shadow:0 0 12px rgba(47,228,255,.4)}.node{position:relative;z-index:2;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;margin:0 auto 58px;background:#0b1425}.c1{border:2px solid #48cfff;color:#7fe9ff}.c2{border:2px solid #b269ff;color:#e2b7ff}.c3{border:2px solid #ffb020;color:#ffd680}.c4{border:2px solid #18d493;color:#8df8d0}.tlist{display:flex;flex-direction:column;gap:14px}.tcard{padding:15px 16px;display:grid;grid-template-columns:1.1fr .9fr;gap:12px}.table{display:grid;grid-template-columns:1.1fr .8fr .8fr .8fr;gap:10px;font-size:14px}.table>div{padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06)}.table .head{color:#82cfff;font-weight:700;letter-spacing:.04em;background:rgba(47,228,255,.06)}
+.nav{position:fixed;left:50%;transform:translateX(-50%);bottom:22px;z-index:100;display:flex;align-items:center;gap:14px;padding:10px 18px;border-radius:40px;border:1px solid rgba(119,188,255,.18);background:rgba(4,11,21,.72);backdrop-filter:blur(14px)}.btn{width:38px;height:38px;border-radius:50%;border:none;cursor:pointer;color:#bfefff;background:rgba(255,255,255,.05);font-size:18px}.dots{display:flex;gap:8px}.dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.16);cursor:pointer}.dot.active{background:#2fe4ff;box-shadow:0 0 12px rgba(47,228,255,.7)}.counter{min-width:52px;text-align:center;color:#8aa5c9;font-size:12px}.reveal{opacity:0;transform:translateY(20px)}.spot{position:fixed;inset:0;z-index:99;pointer-events:none}
+@media (max-width:1100px){.content{width:calc(100vw - 28px);height:calc(100vh - 70px);padding:18px}.hero,.grid2,.grid3,.grid4,.trace,.tcard,.table,.mini{grid-template-columns:1fr}.timeline{display:none}}
+</style></head><body><div class="spot"></div><div class="deck"><section class="slide active" data-slide="1"><div class="mesh"><div class="blob" style="width:420px;height:420px;top:-110px;right:-80px;background:rgba(47,228,255,.10)"></div><div class="blob" style="width:320px;height:320px;bottom:-80px;left:-60px;background:rgba(169,92,255,.09)"></div><div class="blob" style="width:220px;height:220px;top:45%;left:14%;background:rgba(21,208,143,.06)"></div></div><canvas class="canvas"></canvas><div class="top"></div><div class="content">
+<div class="hero panel">
+  <div>
+    <div class="pill reveal">VENUS V5 · WHITE-BOX DATAFLOW ENGINE</div>
+    <div class="h1 grad reveal" style="margin:18px 0 14px">Venus — AI 原生数据处理智能体</div>
+    <div class="h3 reveal" style="font-size:28px;line-height:1.35">面向高校“教-学-管-评”的白盒数据流引擎</div>
+    <p class="sub reveal" style="max-width:700px;margin-top:18px">把 Excel 里的重复搬砖，升级成可审计、可回滚、可复用的五阶段智能数据处理系统。</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px" class="reveal">
+      <span class="tag cyan">AI-Native</span><span class="tag purple">White-Box</span><span class="tag orange">Audit-Ready</span><span class="tag green">Rust-Accelerated</span>
+    </div>
+  </div>
+  <div style="text-align:center">
+    <div class="heroBadge reveal">V5</div>
+    <div class="glass card reveal" style="text-align:left">
+      <div class="label">答辩主张</div><p style="font-size:18px;color:#eaf2ff">从“复制-粘贴 40 次”到“几分钟批量完成”</p>
+      <div class="foot">Schema · Radar · Dispatcher · ManagerAI · Sandbox</div>
+    </div>
+  </div>
+</div>
+</div></section><section class="slide" data-slide="2"><div class="mesh"><div class="blob" style="width:420px;height:420px;top:-110px;right:-80px;background:rgba(47,228,255,.08)"></div><div class="blob" style="width:320px;height:320px;bottom:-80px;left:-60px;background:rgba(169,92,255,.08)"></div><div class="blob" style="width:220px;height:220px;top:45%;left:14%;background:rgba(255,176,32,.05)"></div></div><div class="top"></div><div class="content">
+<div class="section reveal"><div><div class="kicker">Agenda</div><div class="h2 grad">答辩结构与页面系统</div><p>本版直接融合两张参考图：一张负责 Stage 总览，一张负责 Runtime 监控台。</p></div><div class="pill">至少 5 种固定模板 · 已落地成稿</div></div>
+<div class="grid3">
+  <div class="glass card reveal"><div class="ptitle"><span class="tag cyan">T1</span><div class="h3">封面母版</div></div><p>大标题 + 系统代号 + 状态标签。</p></div>
+  <div class="glass card reveal"><div class="ptitle"><span class="tag purple">T2</span><div class="h3">议程/目录</div></div><p>分章节组织答辩逻辑。</p></div>
+  <div class="glass card reveal"><div class="ptitle"><span class="tag orange">T3</span><div class="h3">问题/价值卡片</div></div><p>多卡片强信息密度展示。</p></div>
+  <div class="glass card reveal"><div class="ptitle"><span class="tag green">T4</span><div class="h3">Stage 作战图</div></div><p>继承第一张图的大段式链路总览。</p></div>
+  <div class="glass card reveal"><div class="ptitle"><span class="tag red">T5</span><div class="h3">Runtime 监控台</div></div><p>继承第二张图的节点、日志和状态块。</p></div>
+  <div class="glass card reveal"><div class="ptitle"><span class="tag cyan">T6</span><div class="h3">结果/指标母版</div></div><p>性能、测试、团队、路线图收束。</p></div>
+</div>
+</div></section><section class="slide" data-slide="3"><div class="mesh"><div class="blob" style="width:420px;height:420px;top:-110px;right:-80px;background:rgba(47,228,255,.08)"></div><div class="blob" style="width:320px;height:320px;bottom:-80px;left:-60px;background:rgba(255,90,140,.07)"></div><div class="blob" style="width:220px;height:220px;top:45%;left:14%;background:rgba(169,92,255,.05)"></div></div><div class="top"></div><div class="content">
+<div class="section reveal"><div><div class="kicker">Pain Points</div><div class="h2 grad">高校行政人员的 Excel 困境</div><p>问题不是“不会用 AI”，而是数据处理流程低效、脏乱、不可追溯、无法复用。</p></div><div class="pill">学期末 · 40 名学生 · 40 次往返</div></div>
+<div class="grid2">
+  <div class="glass card reveal"><div class="ptitle"><span class="tag cyan">P1</span><div class="h3">逐人操作，效率极低</div></div><p>辅导员需要在 Excel 和 AI 网页工具之间反复切换，一个班的评价常常耗掉整整一个下午。</p></div>
+  <div class="glass card reveal"><div class="ptitle"><span class="tag red">P2</span><div class="h3">数据质量无保障</div></div><p>空值、错行、混合类型、重复姓名都可能潜伏在原始表里，人工很难提前发现。</p></div>
+  <div class="glass card reveal"><div class="ptitle"><span class="tag orange">P3</span><div class="h3">操作不可追溯</div></div><p>谁改了什么、什么时候改、改前是什么，没有日志链，就难以应对异议和审计。</p></div>
+  <div class="glass card reveal"><div class="ptitle"><span class="tag purple">P4</span><div class="h3">重复劳动无法复用</div></div><p>同类报表每学期都要从头再来，缺乏模板化、结构化、可复放的工作流资产。</p></div>
+</div>
+</div></section><section class="slide" data-slide="4"><div class="mesh"><div class="blob" style="width:420px;height:420px;top:-110px;right:-80px;background:rgba(169,92,255,.08)"></div><div class="blob" style="width:320px;height:320px;bottom:-80px;left:-60px;background:rgba(21,208,143,.06)"></div><div class="blob" style="width:220px;height:220px;top:45%;left:14%;background:rgba(47,228,255,.06)"></div></div><div class="top"></div><div class="content">
+<div class="section reveal"><div><div class="kicker">Users & Scenes</div><div class="h2 grad">三类用户，一个白盒引擎</div><p>Venus 统一底层引擎，但针对不同角色强调不同价值：效率、透明性、可复现。</p></div><div class="pill">教 · 学 · 管 · 评</div></div>
+<div class="grid3">
+  <div class="glass card reveal"><div class="ptitle"><span class="tag cyan">User A</span><div class="h3">辅导员 / 班主任</div></div><p>综合评价、综测计算、奖学金材料整理。需求是“一键批量 + 内容个性化”。</p></div>
+  <div class="glass card reveal"><div class="ptitle"><span class="tag purple">User B</span><div class="h3">教务处行政人员</div></div><p>成绩汇总、毕业审核、评估统计。需求是异常检测准确、操作透明、结果可查。</p></div>
+  <div class="glass card reveal"><div class="ptitle"><span class="tag green">User C</span><div class="h3">科研团队 / 研究生</div></div><p>实验清洗、问卷预处理、文献数据整理。需求是清洗快速、过程可复现。</p></div>
+</div>
+<div class="grid3" style="margin-top:16px">
+  <div class="glass card reveal"><div class="label">场景 A</div><p>学生综合评价批量生成与填写。</p></div>
+  <div class="glass card reveal"><div class="label">场景 B</div><p>成绩数据清洗与异常检测。</p></div>
+  <div class="glass card reveal"><div class="label">场景 C</div><p>教务报表批量处理与模板复用。</p></div>
+</div>
+</div></section><section class="slide" data-slide="5"><div class="mesh"><div class="blob" style="width:420px;height:420px;top:-110px;right:-80px;background:rgba(47,228,255,.08)"></div><div class="blob" style="width:320px;height:320px;bottom:-80px;left:-60px;background:rgba(169,92,255,.08)"></div><div class="blob" style="width:220px;height:220px;top:45%;left:14%;background:rgba(255,176,32,.05)"></div></div><div class="top"></div><div class="content">
+<div class="section reveal"><div><div class="kicker">Architecture</div><div class="h2 grad">双模式融合架构：工作台 + 工作流</div><p>用户前台看到的是简单入口，后台运行的是同一条受控的数据流与安全引擎。</p></div><div class="pill">共享会话状态 · 切换即同步</div></div>
+<div class="grid2">
+  <div class="panel card reveal"><div class="ptitle"><span class="tag cyan">Mode A</span><div class="h3">表格工作台</div></div><div class="list"><div class="item"><i></i><span>上传 Excel 后直接看到真实表格与侧边栏聊天。</span></div><div class="item"><i></i><span>普通操作静默执行，破坏性操作再请求确认。</span></div><div class="item"><i></i><span>COW 快照保证随时撤销。</span></div></div></div>
+  <div class="panel card reveal"><div class="ptitle"><span class="tag purple">Mode B</span><div class="h3">工作流管道</div></div><div class="list"><div class="item"><i></i><span>五阶段流水线完整可视化。</span></div><div class="item"><i></i><span>适合正式审计与评审场景。</span></div><div class="item"><i></i><span>流程完成后支持存为模板。</span></div></div></div>
+</div>
+<div class="panel reveal" style="margin-top:18px;padding:18px 22px"><div class="ptitle"><span class="tag green">Shared V5 Engine</span><div class="h3">SchemaAnchor → RadarStation → Dispatcher → ManagerAI → SandboxWorker</div></div><div class="grid4"><div class="glass card"><div class="label">安全底座</div><p>契约、AST、断路器</p></div><div class="glass card"><div class="label">数据底座</div><p>Polars、Arrow、Rust 解析</p></div><div class="glass card"><div class="label">状态底座</div><p>OperationLog、DecisionRecord</p></div><div class="glass card"><div class="label">模板底座</div><p>ZasaCommand 序列可复用</p></div></div></div>
+</div></section><section class="slide" data-slide="6"><div class="mesh"><div class="blob" style="width:420px;height:420px;top:-110px;right:-80px;background:rgba(47,228,255,.10)"></div><div class="blob" style="width:320px;height:320px;bottom:-80px;left:-60px;background:rgba(169,92,255,.09)"></div><div class="blob" style="width:220px;height:220px;top:45%;left:14%;background:rgba(21,208,143,.06)"></div></div><canvas class="canvas"></canvas><div class="top"></div><div class="content">
+<div class="section reveal"><div><div class="kicker">Pipeline Overview</div><div class="h2 grad">五阶段白盒数据流：全链路物理执行图</div><p>这一页直接继承第一张参考图的“Stage 作战图”基因，用于讲清系统主线。</p></div><div class="pill">从 Excel 输入到 Clean Excel 输出</div></div>
+<div style="display:grid;gap:14px">
+  <div class="stage sblue reveal"><div class="shead"><div class="sicon">🧭</div><div><div class="label">Stage 0</div><div class="stitle">意图锚定 · SchemaAnchor</div><div class="ssub">识别列结构，生成 SchemaContract，确认后方可入流</div></div></div><div class="mini"><div class="line">7 种类型枚举，不依赖 LLM</div><div class="line">数据结构先定，再放行后续处理</div></div></div>
+  <div class="stage spurple reveal"><div class="shead"><div class="sicon">📡</div><div><div class="label">Stage 1</div><div class="stitle">雷达侦察 · RadarStation</div><div class="ssub">6 维扫描 + visual_df / shadow_df 双轨分离</div></div></div><div class="mini"><div class="line">缺失值、混合类型、异常字符、混合语言等并行检查</div><div class="line">CRITICAL 超阈值即熔断</div></div></div>
+  <div class="stage sorange reveal"><div class="shead"><div class="sicon">🧠</div><div><div class="label">Stage 2 + 3</div><div class="stitle">调度中枢 · 法官层</div><div class="ssub">自然语言编译为 ZasaCommand，再做样本审批验证</div></div></div><div class="mini"><div class="line">3 道理解力考试题</div><div class="line">5 条铁律约束样本结果</div></div></div>
+  <div class="stage sgreen reveal"><div class="shead"><div class="sicon">🛠</div><div><div class="label">Stage 4</div><div class="stitle">沙箱执行 · SandboxWorker</div><div class="ssub">最小权限 WorkerSpec + COW 快照 + 不可变日志链</div></div></div><div class="mini"><div class="line">11 种原子操作全部用 Polars 原生 API</div><div class="line">通过校验后再合并回主表</div></div></div>
+</div>
+</div></section><section class="slide" data-slide="7"><div class="mesh"><div class="blob" style="width:420px;height:420px;top:-110px;right:-80px;background:rgba(47,228,255,.08)"></div><div class="blob" style="width:320px;height:320px;bottom:-80px;left:-60px;background:rgba(169,92,255,.07)"></div><div class="blob" style="width:220px;height:220px;top:45%;left:14%;background:rgba(21,208,143,.05)"></div></div><div class="top"></div><div class="content">
+<div class="section reveal"><div><div class="kicker">Stages 0 · 1</div><div class="h2 grad">先识别，再体检：Runtime 上半场</div><p>这一页吸收第二张参考图的 Runtime Context 与 Radar Matrix 语言，讲“看懂表”和“看穿表”。</p></div><div class="pill">参考图 2 的控制台语汇</div></div>
+<div class="grid2">
+  <div class="panel card reveal"><div class="ptitle"><span class="tag cyan">SchemaAnchor</span><div class="h3">数据结构身份证</div></div><div class="table"><div class="head">列名</div><div class="head">类型</div><div class="head">非空率</div><div class="head">角色</div><div>姓名</div><div>text</div><div>90%</div><div>主识别</div><div>高数成绩</div><div>integer</div><div>80%</div><div>待填充列</div><div>英语成绩</div><div>mixed</div><div>90%</div><div>类型预警</div><div>综合评价</div><div>empty</div><div>0%</div><div>待写入</div></div><div class="foot">SchemaContract 是所有后续操作的前置契约。</div></div>
+  <div class="panel card reveal"><div class="ptitle"><span class="tag purple">RadarStation</span><div class="h3">6 维体检 + 双轨分离</div></div><div class="grid2"><div class="glass card"><div class="label">Visual DF</div><p>给人看，保留原始格式与问题标记。</p></div><div class="glass card"><div class="label">Shadow DF</div><p>给 AI 吃，深度清洗与类型统一。</p></div></div><div class="list" style="margin-top:12px"><div class="item"><i></i><span>发现 2 个空值、1 列混合类型、1 列全空、2 处中英混排。</span></div><div class="item"><i></i><span>输出 RadarReport：列名、行号、严重等级、修复建议齐全。</span></div><div class="item"><i></i><span>CRITICAL 超过 5 个时熔断，拒绝带病执行。</span></div></div></div>
+</div>
+</div></section><section class="slide" data-slide="8"><div class="mesh"><div class="blob" style="width:420px;height:420px;top:-110px;right:-80px;background:rgba(255,176,32,.08)"></div><div class="blob" style="width:320px;height:320px;bottom:-80px;left:-60px;background:rgba(21,208,143,.07)"></div><div class="blob" style="width:220px;height:220px;top:45%;left:14%;background:rgba(47,228,255,.05)"></div></div><div class="top"></div><div class="content">
+<div class="section reveal"><div><div class="kicker">Stages 2 · 3 · 4</div><div class="h2 grad">编译、审批、执行：法官与工程兵分离</div><p>这不是“让大模型直接改表”，而是先编译、再审批、最后在沙箱中最小权限执行。</p></div><div class="pill">结构化命令，不做黑盒施法</div></div>
+<div class="grid3">
+  <div class="panel card reveal"><div class="ptitle"><span class="tag orange">Dispatcher</span><div class="h3">自然语言编译器</div></div><p>把“把高数成绩空值用班级平均分填充”转成 ZasaCommand。</p><div class="code" style="margin-top:10px">intent: data_clean
+operation_type: fill_missing
+target_column: 高数成绩
+strategy: mean</div></div>
+  <div class="panel card reveal"><div class="ptitle"><span class="tag purple">ManagerAI</span><div class="h3">双盲验证法官层</div></div><p>3 道理解力考试 + 5 条铁律样本验证，全部通过才签发 VerifiedPlan。</p><div class="code" style="margin-top:10px">Q1 目标列?  高数成绩
+Q2 策略?    mean
+Q3 影响行?  2
+VERDICT     APPROVED</div></div>
+  <div class="panel card reveal"><div class="ptitle"><span class="tag green">SandboxWorker</span><div class="h3">最小权限工程兵</div></div><p>只执行批准操作，不做自由决策；一切在 COW 快照上发生。</p><div class="code" style="margin-top:10px">[INFO] executing fill_missing
+rows_affected = 2
+integrity_check = PASS
+merge_back = YES</div></div>
+</div>
+</div></section><section class="slide" data-slide="9"><div class="mesh"><div class="blob" style="width:420px;height:420px;top:-110px;right:-80px;background:rgba(255,90,140,.06)"></div><div class="blob" style="width:320px;height:320px;bottom:-80px;left:-60px;background:rgba(47,228,255,.08)"></div><div class="blob" style="width:220px;height:220px;top:45%;left:14%;background:rgba(21,208,143,.05)"></div></div><div class="top"></div><div class="content">
+<div class="section reveal"><div><div class="kicker">Security & Performance</div><div class="h2 grad">三道防线，三道机制，外加 Rust 原生加速</div><p>目标不是“尽量正确”，而是“即使出错也必须可控、可停、可回滚、可追责”。</p></div><div class="pill">Safe by Contract · Fast by Native</div></div>
+<div class="grid2">
+  <div class="panel card reveal"><div class="ptitle"><span class="tag red">安全体系</span><div class="h3">三道防线 + 三道机制</div></div><div class="list"><div class="item"><i></i><span>Pydantic V2 严格契约层：13 个契约、11 种操作 Schema。</span></div><div class="item"><i></i><span>AST 白名单沙箱：禁用 import、exec、eval、open。</span></div><div class="item"><i></i><span>断路器、COW 快照、不可变日志链，共同保证数据零污染。</span></div></div></div>
+  <div class="panel card reveal"><div class="ptitle"><span class="tag cyan">性能体系</span><div class="h3">Rust / Native 加速层</div></div><div class="grid4"><div class="glass metric"><div class="mval">8×</div><div class="label">读取加速</div></div><div class="glass metric"><div class="mval">10–50×</div><div class="label">计算加速</div></div><div class="glass metric"><div class="mval">50–70%</div><div class="label">内存下降</div></div><div class="glass metric"><div class="mval">CPU</div><div class="label">全核利用</div></div></div></div>
+</div>
+<div class="grid4" style="margin-top:16px"><div class="glass metric reveal"><div class="mval grad">84</div><div class="label">自动化测试</div></div><div class="glass metric reveal"><div class="mval grad">13</div><div class="label">ADR 记录</div></div><div class="glass metric reveal"><div class="mval grad">11</div><div class="label">后端模块</div></div><div class="glass metric reveal"><div class="mval grad">3</div><div class="label">LLM 后端</div></div></div>
+</div></section><section class="slide" data-slide="10"><div class="mesh"><div class="blob" style="width:420px;height:420px;top:-110px;right:-80px;background:rgba(47,228,255,.10)"></div><div class="blob" style="width:320px;height:320px;bottom:-80px;left:-60px;background:rgba(169,92,255,.09)"></div><div class="blob" style="width:220px;height:220px;top:45%;left:14%;background:rgba(21,208,143,.06)"></div></div><canvas class="canvas"></canvas><div class="top"></div><div class="content">
+<div class="section reveal"><div><div class="kicker">Example Trace</div><div class="h2 grad">运行面板式全程追踪：从输入到 PASS</div><p>这一页直接把第二张参考图中的“节点 + 状态 + 日志 + 审批结果”转成答辩证据页。</p></div><div class="pill">10 Rows × 7 Cols · Live Trace</div></div>
+<div class="panel" style="padding:18px;height:100%">
+  <div class="trace">
+    <div class="timeline reveal"><div class="node c1">S0</div><div class="node c2">S2</div><div class="node c3">S3</div><div class="node c4">S4</div></div>
+    <div class="tlist">
+      <div class="tcard glass reveal"><div><div class="ptitle"><span class="tag cyan">Runtime Context</span><div class="h3">SchemaAnchor</div></div><div class="kv"><div>Scenario</div><div>学生花名册清洗</div><div>Input</div><div>10 Rows × 7 Cols</div><div>User Intent</div><div>把高数成绩列的空值用班级平均分填充</div></div></div><div class="code">姓名:text(90%)
+学号:text(100%)
+高数成绩:integer(80%)
+英语成绩:mixed(90%)
+综合评价:empty(0%)</div></div>
+      <div class="tcard glass reveal"><div><div class="ptitle"><span class="tag purple">Radar Scan</span><div class="h3">RadarStation</div></div><div class="list"><div class="item"><i></i><span>7 issues detected</span></div><div class="item"><i></i><span>综合评价 100% Missing / CRITICAL</span></div><div class="item"><i></i><span>高数成绩 20% Missing，英语成绩 Mixed Type</span></div></div></div><div class="code">dual-track active:
+visual_df → 原样展示 + 问题标记
+shadow_df → 深度清洗 + 类型统一
+circuit → continue</div></div>
+      <div class="tcard glass reveal"><div><div class="ptitle"><span class="tag orange">Command & Verdict</span><div class="h3">Dispatcher + ManagerAI</div></div><div class="code">compiled_instruction:
+fill_missing on 高数成绩
+strategy = mean
+
+verdict = APPROVED
+rows_to_change = 2</div></div><div class="code">Preflight Q/A
+Q1 target?  高数成绩
+Q2 strategy? mean
+Q3 impact?   2 rows
+
+5 铁律校验：PASS</div></div>
+      <div class="tcard glass reveal"><div><div class="ptitle"><span class="tag green">Execution</span><div class="h3">SandboxWorker</div></div><div class="code">[INFO] Executing fill_missing
+[INFO] rows_affected = 2
+[SUCCESS] immutable audit chain generated
+[PASS] merged to main</div></div><div class="table"><div class="head">姓名</div><div class="head">前</div><div class="head">后</div><div class="head">状态</div><div>王五</div><div>null</div><div>82.75</div><div>filled</div><div>吴十</div><div>null</div><div>82.75</div><div>filled</div><div>其余</div><div>原值</div><div>原值</div><div>unchanged</div></div></div>
+    </div>
+  </div>
+</div>
+</div></section><section class="slide" data-slide="11"><div class="mesh"><div class="blob" style="width:420px;height:420px;top:-110px;right:-80px;background:rgba(169,92,255,.08)"></div><div class="blob" style="width:320px;height:320px;bottom:-80px;left:-60px;background:rgba(255,176,32,.07)"></div><div class="blob" style="width:220px;height:220px;top:45%;left:14%;background:rgba(21,208,143,.05)"></div></div><div class="top"></div><div class="content">
+<div class="section reveal"><div><div class="kicker">Innovation · Team · Roadmap</div><div class="h2 grad">不仅能跑通，更能解释、治理、迭代</div><p>最后一页把创新点、团队分工与下一步规划收束成答辩最关心的“完成度 + 延展性”。</p></div><div class="pill">Explainable · Governable · Reusable</div></div>
+<div class="grid3">
+  <div class="panel card reveal"><div class="ptitle"><span class="tag cyan">创新点</span><div class="h3">五项核心差异</div></div><p>白盒可审计、双轨数据分离、法官-工程兵解耦、COW 快照 + 断路器、Rust 原生加速。</p></div>
+  <div class="panel card reveal"><div class="ptitle"><span class="tag purple">团队分工</span><div class="h3">3 人协作</div></div><p>A：核心引擎与安全组件 50%；B：前端与实时交互 30%；C：产品设计、测试与文档 20%。</p></div>
+  <div class="panel card reveal"><div class="ptitle"><span class="tag green">路线图</span><div class="h3">Phase 4–7</div></div><p>模板复用、多源接入、协作审批、插件生态，逐步把单机工具升级成平台能力。</p></div>
+</div>
+<div class="panel reveal" style="margin-top:18px;padding:20px 22px;text-align:center"><div class="h3 grad">Venus 的价值，不是让 AI 帮你“做点表格”，而是让高校数据工作第一次具备系统级可解释性与可治理性。</div></div>
+</div></section><section class="slide" data-slide="12"><div class="mesh"><div class="blob" style="width:420px;height:420px;top:-110px;right:-80px;background:rgba(47,228,255,.10)"></div><div class="blob" style="width:320px;height:320px;bottom:-80px;left:-60px;background:rgba(169,92,255,.09)"></div><div class="blob" style="width:220px;height:220px;top:45%;left:14%;background:rgba(21,208,143,.06)"></div></div><canvas class="canvas"></canvas><div class="top"></div><div class="content">
+<div class="panel" style="padding:36px 34px;text-align:center">
+  <div class="pill reveal" style="margin:0 auto 16px">THANK YOU · VENUS V5</div>
+  <div class="h1 grad reveal">答辩完成 / 系统在线</div>
+  <p class="sub reveal" style="max-width:760px;margin:18px auto 0">你现在拿到的是一套已成型的终版风格稿：既保留“全链路作战图”的架构感，也保留“运行控制台”的系统现场感。</p>
+  <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px" class="reveal"><span class="tag cyan">WHITE-BOX</span><span class="tag purple">SAFE</span><span class="tag orange">AUDITABLE</span><span class="tag green">READY FOR DEFENSE</span></div>
+</div>
+</div></section></div><div class="nav"><button class="btn" onclick="chg(-1)">&#8249;</button><div class="dots" id="dots"></div><button class="btn" onclick="chg(1)">&#8250;</button><span class="counter" id="counter">1 / 12</span></div><script>
+let current=1;const total=document.querySelectorAll('.slide').length;const dots=document.getElementById('dots');const counter=document.getElementById('counter');for(let i=1;i<=total;i++){const d=document.createElement('div');d.className='dot'+(i===1?' active':'');d.onclick=()=>go(i);dots.appendChild(d)}
+function go(n){document.querySelector('.slide.active')?.classList.remove('active');const s=document.querySelector(`.slide[data-slide="${n}"]`);if(s){s.classList.add('active');animateSlide(s)}current=n;update()}
+function chg(d){let n=current+d;if(n<1)n=total;if(n>total)n=1;go(n)}
+function update(){document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i+1===current));counter.textContent=`${current} / ${total}`}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();chg(1)}if(e.key==='ArrowLeft'){e.preventDefault();chg(-1)}})
+let x0=0;document.addEventListener('touchstart',e=>x0=e.touches[0].clientX);document.addEventListener('touchend',e=>{const dx=x0-e.changedTouches[0].clientX;if(Math.abs(dx)>50)chg(dx>0?1:-1)})
+function animateSlide(sl){sl.querySelectorAll('.reveal').forEach((el,i)=>{el.style.transition='none';el.style.opacity='0';el.style.transform='translateY(20px)';el.offsetHeight;const d=i*.06;el.style.transition=`opacity .35s ease ${d}s, transform .35s ease ${d}s`;el.style.opacity='1';el.style.transform='translateY(0)'});sl.querySelectorAll('.bar').forEach((b,i)=>{b.style.width='0%';b.style.transition=`width .6s ease ${i*.08}s`;b.offsetHeight;b.style.width=b.dataset.w+'%'})}
+function initCanvas(c,interactive){if(!c)return;const ctx=c.getContext('2d');const fit=()=>{c.width=c.offsetWidth;c.height=c.offsetHeight};fit();window.addEventListener('resize',fit);let mx=-1e3,my=-1e3;const arr=Array.from({length:interactive?42:16},()=>({x:Math.random()*c.width,y:Math.random()*c.height,vx:(Math.random()-.5)*.28,vy:(Math.random()-.5)*.28,s:Math.random()*2+1,a:Math.random()*.3+.08}));if(interactive){c.addEventListener('mousemove',e=>{const r=c.getBoundingClientRect();mx=e.clientX-r.left;my=e.clientY-r.top});c.addEventListener('mouseleave',()=>{mx=-1e3;my=-1e3})}
+(function tick(){ctx.clearRect(0,0,c.width,c.height);arr.forEach(p=>{const dx=p.x-mx,dy=p.y-my,dist=Math.sqrt(dx*dx+dy*dy)||1;if(interactive&&dist<120){p.vx+=(dx/dist)*.03;p.vy+=(dy/dist)*.03}p.vx*=.985;p.vy*=.985;p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=c.width;if(p.x>c.width)p.x=0;if(p.y<0)p.y=c.height;if(p.y>c.height)p.y=0;ctx.beginPath();ctx.arc(p.x,p.y,p.s,0,Math.PI*2);ctx.fillStyle=`rgba(47,228,255,${p.a})`;ctx.fill()});requestAnimationFrame(tick)})()}
+document.querySelectorAll('.canvas').forEach((c,i)=>initCanvas(c,i===0||i===2));document.addEventListener('mousemove',e=>{const s=document.querySelector('.spot');s.style.background=`radial-gradient(560px circle at ${e.clientX}px ${e.clientY}px, rgba(47,228,255,.06), transparent 42%)`});try{animateSlide(document.querySelector('.slide.active'))}catch(e){}
+</script></body></html>
