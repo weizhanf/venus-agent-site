@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Venus — 多 Agent 协作白盒数据引擎，用可审计的约束控制不可预测的 AI">
+    <title>Venus Agent Dashboard — 白盒数据引擎</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- ═══════════════ 粒子背景层 ═══════════════ -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- ═══════════════ 主容器 ═══════════════ -->
+    <div class="app-container">
+
+        <!-- ─── 顶部导航 ─── -->
+        <header class="top-bar">
+            <div class="logo-group">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 40 40" fill="none">
+                        <circle cx="20" cy="20" r="18" stroke="url(#logo-grad)" stroke-width="2.5" opacity="0.6"/>
+                        <path d="M20 6 L20 34 M12 14 L20 6 L28 14" stroke="url(#logo-grad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <defs>
+                            <linearGradient id="logo-grad" x1="0" y1="0" x2="40" y2="40">
+                                <stop offset="0%" stop-color="#a78bfa"/>
+                                <stop offset="100%" stop-color="#06b6d4"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <span class="logo-title">VENUS</span>
+                    <span class="logo-subtitle">Multi-Agent Data Engine</span>
+                </div>
+            </div>
+            <div class="top-bar-right">
+                <div class="status-badge online" id="backend-status">
+                    <span class="status-dot"></span>
+                    <span class="status-text">检测中...</span>
+                </div>
+                <div class="version-badge">v5.0</div>
+            </div>
+        </header>
+
+        <!-- ─── 主体区域 ─── -->
+        <main class="main-content">
+
+            <!-- ═══ 左面板：控制台 ═══ -->
+            <aside class="panel panel-left">
+                <div class="panel-header">
+                    <h2>控制台</h2>
+                </div>
+
+                <!-- 文件上传 -->
+                <section class="card" id="upload-card">
+                    <h3 class="card-title">
+                        <span class="card-icon">📂</span>
+                        数据源
+                    </h3>
+                    <div class="upload-zone" id="upload-zone">
+                        <div class="upload-icon">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                                <path d="M24 32V16M24 16L18 22M24 16L30 22" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M8 32V36C8 38.2 9.8 40 12 40H36C38.2 40 40 38.2 40 36V32" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <p class="upload-text">拖拽 Excel / CSV 到此处</p>
+                        <p class="upload-hint">或点击选择文件</p>
+                        <input type="file" id="file-input" accept=".xlsx,.xls,.csv" hidden>
+                    </div>
+                    <div class="file-info hidden" id="file-info">
+                        <div class="file-meta">
+                            <span class="file-name" id="file-name"></span>
+                            <span class="file-size" id="file-size"></span>
+                        </div>
+                        <button class="btn-icon" id="file-remove" title="移除文件">✕</button>
+                    </div>
+                </section>
+
+                <!-- 指令输入 -->
+                <section class="card">
+                    <h3 class="card-title">
+                        <span class="card-icon">💬</span>
+                        操作指令
+                    </h3>
+                    <textarea id="instruction-input" class="instruction-input" placeholder="用自然语言描述你想对数据做什么...&#10;&#10;例：&#10;• 把年龄列的空值用平均值填充&#10;• 删除重复的学号行&#10;• 将姓名列的隐藏空格去掉" rows="5"></textarea>
+                </section>
+
+                <!-- 执行按钮 -->
+                <button class="btn-primary" id="run-btn" disabled>
+                    <span class="btn-icon-left">▶</span>
+                    <span>启动 Agent 流水线</span>
+                </button>
+
+                <!-- 快捷场景 -->
+                <section class="card">
+                    <h3 class="card-title">
+                        <span class="card-icon">⚡</span>
+                        演示场景
+                    </h3>
+                    <div class="demo-buttons">
+                        <button class="btn-demo" data-demo="clean">
+                            <span class="demo-icon">🧹</span>
+                            <span class="demo-label">脏数据清洗</span>
+                        </button>
+                        <button class="btn-demo" data-demo="pii">
+                            <span class="demo-icon">🔒</span>
+                            <span class="demo-label">PII 脱敏</span>
+                        </button>
+                        <button class="btn-demo" data-demo="rule">
+                            <span class="demo-icon">⚙️</span>
+                            <span class="demo-label">规则引擎</span>
+                        </button>
+                    </div>
+                </section>
+            </aside>
+
+            <!-- ═══ 中央面板：Agent 流水线 ═══ -->
+            <section class="panel panel-center">
+                <div class="panel-header">
+                    <h2>Agent 协作流水线</h2>
+                    <div class="pipeline-timer hidden" id="pipeline-timer">
+                        <span class="timer-icon">⏱</span>
+                        <span class="timer-value" id="timer-value">0.00s</span>
+                    </div>
+                </div>
+
+                <!-- 五阶段流水线可视化 -->
+                <div class="pipeline-track" id="pipeline-track">
+                    <!-- Stage 0 -->
+                    <div class="stage-node" data-stage="0" id="stage-0">
+                        <div class="stage-connector"></div>
+                        <div class="stage-body">
+                            <div class="stage-icon-wrap">
+                                <div class="stage-icon">🔍</div>
+                                <div class="stage-pulse"></div>
+                            </div>
+                            <div class="stage-info">
+                                <span class="stage-label">Stage 0</span>
+                                <span class="stage-name">Schema 锚定</span>
+                                <span class="stage-agent">SchemaAnchor Agent</span>
+                            </div>
+                            <div class="stage-status">
+                                <span class="stage-badge idle">待命</span>
+                            </div>
+                        </div>
+                        <div class="stage-detail hidden" id="stage-0-detail"></div>
+                    </div>
+
+                    <!-- PII Guard -->
+                    <div class="stage-node stage-guard" data-stage="pii" id="stage-pii">
+                        <div class="stage-connector"></div>
+                        <div class="stage-body">
+                            <div class="stage-icon-wrap">
+                                <div class="stage-icon">🛡️</div>
+                                <div class="stage-pulse"></div>
+                            </div>
+                            <div class="stage-info">
+                                <span class="stage-label">PII Guard</span>
+                                <span class="stage-name">脱敏断臂</span>
+                                <span class="stage-agent">HMAC-SHA256</span>
+                            </div>
+                            <div class="stage-status">
+                                <span class="stage-badge idle">待命</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stage 1 -->
+                    <div class="stage-node" data-stage="1" id="stage-1">
+                        <div class="stage-connector"></div>
+                        <div class="stage-body">
+                            <div class="stage-icon-wrap">
+                                <div class="stage-icon">📡</div>
+                                <div class="stage-pulse"></div>
+                            </div>
+                            <div class="stage-info">
+                                <span class="stage-label">Stage 1</span>
+                                <span class="stage-name">雷达侦察</span>
+                                <span class="stage-agent">RadarStation Agent</span>
+                            </div>
+                            <div class="stage-status">
+                                <span class="stage-badge idle">待命</span>
+                            </div>
+                        </div>
+                        <div class="stage-detail hidden" id="stage-1-detail"></div>
+                    </div>
+
+                    <!-- Stage 2 -->
+                    <div class="stage-node" data-stage="2" id="stage-2">
+                        <div class="stage-connector"></div>
+                        <div class="stage-body">
+                            <div class="stage-icon-wrap">
+                                <div class="stage-icon">🧠</div>
+                                <div class="stage-pulse"></div>
+                            </div>
+                            <div class="stage-info">
+                                <span class="stage-label">Stage 2</span>
+                                <span class="stage-name">意图编译</span>
+                                <span class="stage-agent">Dispatcher Agent</span>
+                            </div>
+                            <div class="stage-status">
+                                <span class="stage-badge idle">待命</span>
+                            </div>
+                        </div>
+                        <div class="stage-detail hidden" id="stage-2-detail"></div>
+                    </div>
+
+                    <!-- Stage 3 -->
+                    <div class="stage-node" data-stage="3" id="stage-3">
+                        <div class="stage-connector"></div>
+                        <div class="stage-body">
+                            <div class="stage-icon-wrap">
+                                <div class="stage-icon">⚖️</div>
+                                <div class="stage-pulse"></div>
+                            </div>
+                            <div class="stage-info">
+                                <span class="stage-label">Stage 3</span>
+                                <span class="stage-name">法官审批</span>
+                                <span class="stage-agent">ManagerAI Agent</span>
+                            </div>
+                            <div class="stage-status">
+                                <span class="stage-badge idle">待命</span>
+                            </div>
+                        </div>
+                        <div class="stage-detail hidden" id="stage-3-detail"></div>
+                    </div>
+
+                    <!-- Stage 4 -->
+                    <div class="stage-node" data-stage="4" id="stage-4">
+                        <div class="stage-connector"></div>
+                        <div class="stage-body">
+                            <div class="stage-icon-wrap">
+                                <div class="stage-icon">⚒️</div>
+                                <div class="stage-pulse"></div>
+                            </div>
+                            <div class="stage-info">
+                                <span class="stage-label">Stage 4</span>
+                                <span class="stage-name">工程兵执行</span>
+                                <span class="stage-agent">SandboxWorker Agent</span>
+                            </div>
+                            <div class="stage-status">
+                                <span class="stage-badge idle">待命</span>
+                            </div>
+                        </div>
+                        <div class="stage-detail hidden" id="stage-4-detail"></div>
+                    </div>
+
+                    <!-- PII Restore -->
+                    <div class="stage-node stage-guard" data-stage="restore" id="stage-restore">
+                        <div class="stage-connector"></div>
+                        <div class="stage-body">
+                            <div class="stage-icon-wrap">
+                                <div class="stage-icon">🔓</div>
+                                <div class="stage-pulse"></div>
+                            </div>
+                            <div class="stage-info">
+                                <span class="stage-label">PII Restore</span>
+                                <span class="stage-name">还原真值</span>
+                                <span class="stage-agent">Token → 原值</span>
+                            </div>
+                            <div class="stage-status">
+                                <span class="stage-badge idle">待命</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 中央消息区 -->
+                <div class="center-message" id="center-message">
+                    <div class="hero-text">
+                        <h1>断臂维纳斯</h1>
+                        <p>AI 越强大，人类越需要能随时切断她的手臂</p>
+                        <p class="hero-sub">上传数据 → 发出指令 → 观察 Agent 协作</p>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- ═══ 右面板：审计 & 结果 ═══ -->
+            <aside class="panel panel-right">
+                <div class="panel-header">
+                    <h2>审计 & 结果</h2>
+                </div>
+
+                <!-- 指标仪表盘 -->
+                <section class="card" id="metrics-card">
+                    <h3 class="card-title">
+                        <span class="card-icon">📊</span>
+                        实时指标
+                    </h3>
+                    <div class="metrics-grid">
+                        <div class="metric-item">
+                            <span class="metric-value" id="metric-rows">—</span>
+                            <span class="metric-label">处理行数</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-value" id="metric-issues">—</span>
+                            <span class="metric-label">发现问题</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-value" id="metric-ops">—</span>
+                            <span class="metric-label">执行操作</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-value" id="metric-time">—</span>
+                            <span class="metric-label">总耗时</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 雷达扫描结果 -->
+                <section class="card hidden" id="radar-card">
+                    <h3 class="card-title">
+                        <span class="card-icon">📡</span>
+                        雷达扫描报告
+                    </h3>
+                    <div class="radar-findings" id="radar-findings"></div>
+                </section>
+
+                <!-- 审计日志 -->
+                <section class="card" id="audit-card">
+                    <h3 class="card-title">
+                        <span class="card-icon">🔗</span>
+                        哈希链审计日志
+                    </h3>
+                    <div class="audit-log" id="audit-log">
+                        <div class="audit-empty">等待流水线启动...</div>
+                    </div>
+                </section>
+
+                <!-- 数据预览 -->
+                <section class="card hidden" id="result-card">
+                    <h3 class="card-title">
+                        <span class="card-icon">📋</span>
+                        处理结果
+                    </h3>
+                    <div class="data-preview" id="data-preview"></div>
+                    <button class="btn-secondary" id="download-btn">
+                        <span>⬇️</span> 下载结果 Excel
+                    </button>
+                </section>
+            </aside>
+
+        </main>
+
+        <!-- ─── 底部状态栏 ─── -->
+        <footer class="bottom-bar">
+            <div class="bottom-left">
+                <span class="tech-badge">Polars</span>
+                <span class="tech-badge">HMAC-SHA256</span>
+                <span class="tech-badge">AST Sandbox</span>
+                <span class="tech-badge">COW Snapshot</span>
+                <span class="tech-badge">MCP Protocol</span>
+            </div>
+            <div class="bottom-right">
+                <span class="copyright">Venus Project © 2026 — 白盒数据引擎</span>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
