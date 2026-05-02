@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Venus — 断臂维纳斯 AI 数据引擎</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#06101e;--card:#0d1b30;--border:rgba(100,180,255,.12);--c1:#2fe4ff;--c2:#a95cff;--c3:#ffb020;--c4:#15d08f;--red:#ff5a8c;--text:#e8f0ff;--muted:#8aa4c4}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;line-height:1.7}
+a{color:var(--c1);text-decoration:none}
+
+/* Nav */
+nav{position:fixed;top:0;width:100%;z-index:100;background:rgba(6,16,30,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:14px 0}
+nav .inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 24px}
+nav .logo{font-size:20px;font-weight:900;background:linear-gradient(90deg,var(--c1),var(--c2));-webkit-background-clip:text;background-clip:text;color:transparent}
+nav .links{display:flex;gap:24px;font-size:14px;color:var(--muted)}
+nav .links a:hover{color:var(--c1)}
+
+/* Hero */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:120px 24px 80px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(47,228,255,.08),transparent 70%);top:-100px;right:-100px}
+.hero::after{content:'';position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(169,92,255,.06),transparent 70%);bottom:-100px;left:-100px}
+.hero h1{font-size:clamp(40px,6vw,72px);font-weight:900;letter-spacing:-.03em;line-height:1.05;background:linear-gradient(135deg,#fff 30%,var(--c1) 60%,var(--c2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .sub{font-size:20px;color:var(--muted);margin:20px auto 0;max-width:640px}
+.hero .concept{margin-top:32px;font-size:15px;color:#6a8ab0;max-width:560px;margin-left:auto;margin-right:auto;line-height:1.8}
+.hero .concept em{color:var(--c1);font-style:normal;font-weight:700}
+.tags{display:flex;gap:10px;justify-content:center;margin-top:28px;flex-wrap:wrap}
+.tag{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:.06em;border:1px solid}
+.t1{color:#8ee8ff;border-color:rgba(47,228,255,.3);background:rgba(47,228,255,.08)}
+.t2{color:#d0b0ff;border-color:rgba(169,92,255,.3);background:rgba(169,92,255,.08)}
+.t3{color:#ffd080;border-color:rgba(255,176,32,.3);background:rgba(255,176,32,.08)}
+.t4{color:#80ffd0;border-color:rgba(21,208,143,.3);background:rgba(21,208,143,.08)}
+.t5{color:#ff9fc0;border-color:rgba(255,90,140,.3);background:rgba(255,90,140,.08)}
+
+/* Sections */
+section{padding:80px 24px;max-width:1100px;margin:0 auto}
+.stitle{font-size:14px;letter-spacing:.15em;text-transform:uppercase;color:var(--c1);font-weight:800;margin-bottom:8px}
+h2{font-size:clamp(28px,3.5vw,42px);font-weight:900;letter-spacing:-.02em;margin-bottom:32px}
+
+/* Pipeline */
+.pipeline{display:flex;align-items:flex-start;gap:0;position:relative;overflow-x:auto;padding:20px 0}
+.stage{flex:1;min-width:180px;text-align:center;position:relative}
+.stage .icon{width:64px;height:64px;border-radius:18px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:28px;border:2px solid;transition:.3s}
+.stage:nth-child(1) .icon{border-color:var(--c1);background:rgba(47,228,255,.1);box-shadow:0 0 20px rgba(47,228,255,.15)}
+.stage:nth-child(2) .icon{border-color:var(--c2);background:rgba(169,92,255,.1);box-shadow:0 0 20px rgba(169,92,255,.15)}
+.stage:nth-child(3) .icon{border-color:var(--c3);background:rgba(255,176,32,.1);box-shadow:0 0 20px rgba(255,176,32,.15)}
+.stage:nth-child(4) .icon{border-color:var(--red);background:rgba(255,90,140,.1);box-shadow:0 0 20px rgba(255,90,140,.15)}
+.stage:nth-child(5) .icon{border-color:var(--c4);background:rgba(21,208,143,.1);box-shadow:0 0 20px rgba(21,208,143,.15)}
+.stage .name{font-size:15px;font-weight:800}
+.stage .desc{font-size:13px;color:var(--muted);margin-top:4px}
+.stage .contract{margin-top:8px;font-size:11px;padding:4px 10px;border-radius:8px;background:rgba(255,255,255,.04);border:1px solid var(--border);color:#90b8e0;font-family:monospace}
+.arrow{display:flex;align-items:center;padding-top:20px;color:rgba(255,255,255,.2);font-size:20px}
+
+/* Grid */
+.grid{display:grid;gap:20px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:900px){.g2,.g3,.g4{grid-template-columns:1fr}.pipeline{flex-direction:column;align-items:center}.arrow{transform:rotate(90deg);padding:0}}
+.card{padding:24px;border-radius:18px;background:var(--card);border:1px solid var(--border)}
+.card h3{font-size:17px;font-weight:800;margin-bottom:8px}
+.card p{font-size:14px;color:var(--muted);line-height:1.6}
+.card .num{font-size:36px;font-weight:900;line-height:1}
+
+/* Security */
+.shield{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.shield-item{padding:20px;border-radius:16px;border:1px solid var(--border)}
+.shield-item h4{font-size:15px;font-weight:800;margin-bottom:6px}
+.shield-item p{font-size:13px;color:var(--muted)}
+.defense{background:linear-gradient(135deg,rgba(47,228,255,.06),rgba(13,27,48,.9))}
+.mechanism{background:linear-gradient(135deg,rgba(169,92,255,.06),rgba(13,27,48,.9))}
+
+/* Hash Chain */
+.chain{display:flex;align-items:center;gap:12px;overflow-x:auto;padding:16px 0}
+.block{padding:16px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid var(--border);min-width:160px;text-align:center;font-size:12px}
+.block .hash{font-family:monospace;color:var(--c4);font-size:11px;word-break:break-all;margin-top:6px}
+.block .op{font-weight:800;font-size:14px;margin-bottom:4px}
+.chain-arrow{color:var(--c4);font-size:18px;flex-shrink:0}
+
+/* PII */
+.pii-demo{display:grid;grid-template-columns:1fr 40px 1fr;gap:0;align-items:center}
+.pii-table{font-size:13px;border-collapse:collapse;width:100%}
+.pii-table th{text-align:left;padding:8px 12px;border-bottom:1px solid var(--border);color:var(--muted);font-size:11px;letter-spacing:.08em}
+.pii-table td{padding:8px 12px;border-bottom:1px solid rgba(255,255,255,.04)}
+.pii-arrow{text-align:center;font-size:24px;color:var(--c1)}
+.masked{color:var(--c2);font-family:monospace}
+.blocked{color:var(--red);text-decoration:line-through;opacity:.5}
+
+/* MCP */
+.tool-list{display:flex;flex-direction:column;gap:12px}
+.tool{padding:16px 20px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid var(--border);display:flex;gap:16px;align-items:flex-start}
+.tool .tname{font-family:monospace;font-weight:800;color:var(--c1);font-size:14px;white-space:nowrap}
+.tool .tdesc{font-size:13px;color:var(--muted)}
+
+/* Metrics */
+.metric .num{margin-bottom:4px}
+.metric .label{font-size:12px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+.metric .foot{font-size:12px;color:#5a7a9e;margin-top:8px}
+
+/* Comparison */
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.cmp-col{padding:24px;border-radius:18px}
+.cmp-old{background:rgba(255,90,140,.05);border:1px solid rgba(255,90,140,.15)}
+.cmp-new{background:rgba(21,208,143,.05);border:1px solid rgba(21,208,143,.15)}
+.cmp-col h3{font-size:16px;font-weight:800;margin-bottom:12px}
+.cmp-col ul{list-style:none;font-size:14px;color:var(--muted)}
+.cmp-col li{padding:4px 0}
+.cmp-col li::before{content:'';display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:10px}
+.cmp-old li::before{background:var(--red)}
+.cmp-new li::before{background:var(--c4)}
+
+footer{text-align:center;padding:60px 24px;color:#4a6580;font-size:13px;border-top:1px solid var(--border)}
+</style>
+</head>
+<body>
+
+<nav>
+<div class="inner">
+  <div class="logo">VENUS</div>
+  <div class="links">
+    <a href="#pipeline">Pipeline</a>
+    <a href="#security">Security</a>
+    <a href="#pii">Privacy</a>
+    <a href="#chain">Audit</a>
+    <a href="#mcp">Ecosystem</a>
+    <a href="#metrics">Metrics</a>
+  </div>
+</div>
+</nav>
+
+<!-- ========== HERO ========== -->
+<div class="hero">
+  <div style="position:relative;z-index:2">
+    <h1>Venus</h1>
+    <div class="sub">AI 原生数据处理智能体 — 白盒数据流引擎</div>
+    <div class="concept">
+      她是一尊<em>断臂的维纳斯</em>。<br>
+      人类通过约束 AI 的工具，可以随时切断她的手臂——<br>
+      用<em>白盒的可审计性</em>约束<em>黑盒的不可预测性</em>。
+    </div>
+    <div class="tags">
+      <span class="tag t1">White-Box</span>
+      <span class="tag t2">HMAC Privacy</span>
+      <span class="tag t3">Hash-Chain Audit</span>
+      <span class="tag t4">MCP Ecosystem</span>
+      <span class="tag t5">Zero-LLM Fast Path</span>
+    </div>
+  </div>
+</div>
+
+<!-- ========== PIPELINE ========== -->
+<section id="pipeline">
+  <div class="stitle">Core Architecture</div>
+  <h2>五阶段白盒数据流 — 每个箭头都是一道契约门</h2>
+
+  <div class="pipeline">
+    <div class="stage">
+      <div class="icon">S0</div>
+      <div class="name">意图锚定</div>
+      <div class="desc">Polars dtype 推断<br>零 LLM</div>
+      <div class="contract">SchemaContract</div>
+    </div>
+    <div class="arrow">&rarr;</div>
+    <div class="stage">
+      <div class="icon">S1</div>
+      <div class="name">雷达侦察</div>
+      <div class="desc">6 维并行扫描<br>双轨分离</div>
+      <div class="contract">RadarReport</div>
+    </div>
+    <div class="arrow">&rarr;</div>
+    <div class="stage">
+      <div class="icon">S2</div>
+      <div class="name">调度中枢</div>
+      <div class="desc">自然语言 &rarr; 结构化指令<br>规则引擎 / 1x LLM</div>
+      <div class="contract">ZasaCommand</div>
+    </div>
+    <div class="arrow">&rarr;</div>
+    <div class="stage">
+      <div class="icon">S3</div>
+      <div class="name">法官审批</div>
+      <div class="desc">理解力考试<br>样本验证 + 5 铁律</div>
+      <div class="contract">VerifiedPlan</div>
+    </div>
+    <div class="arrow">&rarr;</div>
+    <div class="stage">
+      <div class="icon">S4</div>
+      <div class="name">工程兵执行</div>
+      <div class="desc">COW 快照<br>12 种原子操作</div>
+      <div class="contract">SandboxResult</div>
+    </div>
+  </div>
+
+  <div style="text-align:center;margin-top:24px;font-size:14px;color:var(--muted)">
+    13 个 Pydantic V2 强类型 dataclass &middot; 数据不合规则无法通过 &middot; 审批权与执行权分离
+  </div>
+</section>
+
+<!-- ========== SECURITY ========== -->
+<section id="security">
+  <div class="stitle">Security Framework</div>
+  <h2>三道防线 + 三道机制 — 断臂的哲学</h2>
+
+  <div class="shield">
+    <div class="shield-item defense">
+      <h4 style="color:var(--c1)">防线 1 &middot; Pydantic 契约层</h4>
+      <p>extra="forbid" 严格模式，LLM 多返回一个字段直接拒绝。13 个契约覆盖全链路。</p>
+    </div>
+    <div class="shield-item mechanism">
+      <h4 style="color:var(--c2)">机制 1 &middot; 断路器</h4>
+      <p>PipelineBreak 受控中断。雷达熔断（CRITICAL &ge; 5）、法官驳回、编译失败——安全停下，不带病执行。</p>
+    </div>
+    <div class="shield-item defense">
+      <h4 style="color:var(--c1)">防线 2 &middot; AST 白名单沙箱</h4>
+      <p>自定义代码必须通过 AST 语法树审查。import / exec / eval / open —— 从语法层面杜绝。</p>
+    </div>
+    <div class="shield-item mechanism">
+      <h4 style="color:var(--c2)">机制 2 &middot; COW 快照</h4>
+      <p>每步操作前自动存档（parquet）。操作失败 → 丢弃快照 → 数据零污染。</p>
+    </div>
+    <div class="shield-item defense">
+      <h4 style="color:var(--c1)">防线 3 &middot; LLM 输出契约</h4>
+      <p>tool_use 优先 → 不支持时降级正则提取 → 自由文本永远被约束为 JSON。</p>
+    </div>
+    <div class="shield-item mechanism">
+      <h4 style="color:var(--c2)">机制 3 &middot; 哈希链日志</h4>
+      <p>SHA-256 链式审计。每条日志串联前一条的哈希，篡改任意一条 → verify() 立即暴露。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== PII ========== -->
+<section id="pii">
+  <div class="stitle">Privacy Protocol</div>
+  <h2>HMAC-SHA256 隐私脱敏 — AI 永远触碰不到原始数据</h2>
+
+  <div class="pii-demo" style="margin-bottom:32px">
+    <div>
+      <table class="pii-table">
+        <tr><th>原始数据</th><th></th></tr>
+        <tr><td>张三</td><td>110101200001011234</td></tr>
+        <tr><td>李四</td><td>110101200002021234</td></tr>
+        <tr><td>王五</td><td>110101200003031234</td></tr>
+      </table>
+    </div>
+    <div class="pii-arrow">&rarr;</div>
+    <div>
+      <table class="pii-table">
+        <tr><th>LLM 看到的</th><th></th></tr>
+        <tr><td class="masked">PERSON_a3f8c21e</td><td class="blocked">[BLOCKED]</td></tr>
+        <tr><td class="masked">PERSON_7b2e9f04</td><td class="blocked">[BLOCKED]</td></tr>
+        <tr><td class="masked">PERSON_d1c45a87</td><td class="blocked">[BLOCKED]</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid g3">
+    <div class="card">
+      <h3 style="color:var(--red)">BLOCK</h3>
+      <p>完全移除。身份证号、银行卡号。LLM 看不到该列。</p>
+    </div>
+    <div class="card">
+      <h3 style="color:var(--c2)">MASK</h3>
+      <p>HMAC token 化。姓名、手机、邮箱。不可逆，同一密钥跨会话一致。</p>
+    </div>
+    <div class="card">
+      <h3 style="color:var(--c4)">PASS</h3>
+      <p>不处理。成绩、日期等非敏感字段。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== HASH CHAIN ========== -->
+<section id="chain">
+  <div class="stitle">Blockchain-Grade Audit</div>
+  <h2>哈希链式审计 — 篡改任意一条记录都会被发现</h2>
+
+  <div class="chain">
+    <div class="block">
+      <div class="op">GENESIS</div>
+      <div>prev: 000000...</div>
+      <div class="hash">hash: cdfe2888...</div>
+    </div>
+    <div class="chain-arrow">&rarr;</div>
+    <div class="block">
+      <div class="op">FILL_MISSING</div>
+      <div>rows: 2</div>
+      <div class="hash">prev: cdfe2888...<br>hash: c20d37ed...</div>
+    </div>
+    <div class="chain-arrow">&rarr;</div>
+    <div class="block">
+      <div class="op">SORT_ROWS</div>
+      <div>rows: 10</div>
+      <div class="hash">prev: c20d37ed...<br>hash: d155b35a...</div>
+    </div>
+    <div class="chain-arrow">&rarr;</div>
+    <div class="block" style="border-color:var(--red)">
+      <div class="op" style="color:var(--red)">TAMPERED!</div>
+      <div style="color:var(--red)">verify() = false</div>
+      <div class="hash" style="color:var(--red)">hash mismatch</div>
+    </div>
+  </div>
+
+  <p style="text-align:center;color:var(--muted);margin-top:16px;font-size:14px">每条 OperationLog 包含 SHA-256(payload + prev_hash)。seal() 封装，verify() 校验。</p>
+</section>
+
+<!-- ========== RULE ENGINE ========== -->
+<section>
+  <div class="stitle">V2 Optimization</div>
+  <h2>规则引擎快速路径 — 80% 操作零 LLM</h2>
+
+  <div class="cmp">
+    <div class="cmp-col cmp-old">
+      <h3>V1.0 Baseline</h3>
+      <ul>
+        <li>每次请求 4-5 次 LLM 调用</li>
+        <li>~7,150 tokens / 请求</li>
+        <li>延迟 ~12 秒</li>
+        <li>原始数据发送给 LLM</li>
+        <li>Schema 重复发送 3 次</li>
+      </ul>
+    </div>
+    <div class="cmp-col cmp-new">
+      <h3>V2.0 Current</h3>
+      <ul>
+        <li>规则路径 0 次 / LLM 路径 1 次</li>
+        <li>0 tokens（规则）/ ~1,150（LLM）</li>
+        <li>0.09 秒（规则）/ ~6 秒（LLM）</li>
+        <li>HMAC 脱敏后才接触 LLM</li>
+        <li>YAML 预注册，零重复</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ========== MCP ========== -->
+<section id="mcp">
+  <div class="stitle">Ecosystem</div>
+  <h2>MCP Server — 成为 AI 生态的数据安全层</h2>
+
+  <div class="tool-list">
+    <div class="tool">
+      <div class="tname">venus_scan</div>
+      <div class="tdesc">Excel &rarr; Schema 推断 + 6 维雷达报告。任何 MCP 客户端一个调用就能拿到完整的数据质量画像。</div>
+    </div>
+    <div class="tool">
+      <div class="tname">venus_execute</div>
+      <div class="tdesc">自然语言指令 &rarr; 5 阶段白盒流水线 &rarr; 处理后的 Excel。完整审批链路，不是黑盒执行。</div>
+    </div>
+    <div class="tool">
+      <div class="tname">venus_pii_sanitize</div>
+      <div class="tdesc">上传文件 &rarr; 自动检测 7 类 PII &rarr; HMAC 脱敏。其他 AI 工具调用此接口实现数据不出域。</div>
+    </div>
+    <div class="tool">
+      <div class="tname">venus_formula_trace</div>
+      <div class="tdesc">追踪 Excel 公式依赖拓扑，4 种引用格式全覆盖。为金融审计提供公式链完整性证明。</div>
+    </div>
+    <div class="tool">
+      <div class="tname">venus_lp_solve</div>
+      <div class="tdesc">线性规划 JSON &rarr; PuLP 精确求解。LLM 提参数，本地算数学——AI 不算数，引擎算。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== METRICS ========== -->
+<section id="metrics">
+  <div class="stitle">Technical Metrics</div>
+  <h2>数字说话</h2>
+
+  <div class="grid g4">
+    <div class="card metric">
+      <div class="num" style="color:var(--c1)">113</div>
+      <div class="label">Tests Passed</div>
+      <div class="foot">0 failed, 0 stubs</div>
+    </div>
+    <div class="card metric">
+      <div class="num" style="color:var(--c4)">0.09s</div>
+      <div class="label">Rule Engine</div>
+      <div class="foot">零 LLM，零 Token</div>
+    </div>
+    <div class="card metric">
+      <div class="num" style="color:var(--c2)">84%</div>
+      <div class="label">Token Savings</div>
+      <div class="foot">7,150 &rarr; 1,150 / 请求</div>
+    </div>
+    <div class="card metric">
+      <div class="num" style="color:var(--c3)">12</div>
+      <div class="label">Atomic Ops</div>
+      <div class="foot">+ LP Solve</div>
+    </div>
+  </div>
+
+  <div class="grid g3" style="margin-top:20px">
+    <div class="card metric">
+      <div class="num" style="color:var(--c1)">5</div>
+      <div class="label">MCP Tools</div>
+      <div class="foot">Claude / Cursor / VS Code</div>
+    </div>
+    <div class="card metric">
+      <div class="num" style="color:var(--c4)">10-50x</div>
+      <div class="label">Polars vs Pandas</div>
+      <div class="foot">Rust Arrow 列式引擎</div>
+    </div>
+    <div class="card metric">
+      <div class="num" style="color:var(--red)">SHA-256</div>
+      <div class="label">Audit Chain</div>
+      <div class="foot">不可篡改哈希链</div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FORMULA ========== -->
+<section>
+  <div class="stitle">Financial Ready</div>
+  <h2>公式拓扑解析 + 保真屏障 — 金融表的两道保险</h2>
+
+  <div class="grid g2">
+    <div class="card">
+      <h3>公式依赖拓扑解析</h3>
+      <p>递归追踪 Excel 公式链：普通引用 / 绝对引用 / 结构化表引用 / 范围引用全覆盖。输出带"表头名 + 真实数值"的拓扑树，让 LLM 看到的是事实而非猜测。</p>
+      <div style="margin-top:12px;font-family:monospace;font-size:12px;color:var(--c1)">
+        =SUMPRODUCT(G4:P4,$R$4:$AA$4)<br>
+        &nbsp;&nbsp;&rarr; G4(SibSp)=1, H4(Parch)=0, ...<br>
+        &nbsp;&nbsp;&rarr; R4(SibSp权重)=-0.0549, ...
+      </div>
+    </div>
+    <div class="card">
+      <h3>公式保真屏障（三道防线）</h3>
+      <p>LLM 会把 =SUM(A1:A10) 篡改成"求和函数"。三道防线拦截：</p>
+      <p style="color:var(--c1);font-size:13px;margin-top:12px">
+        1. 精确匹配：修复被去掉 "=" 前缀的公式<br>
+        2. 列名锚定：提到公式列时自动追加原始公式<br>
+        3. 公式附录：报告末尾强制追加对照表
+      </p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Venus V5.0 &middot; White-Box Dataflow Engine &middot; Built with Polars + Pydantic V2 + PuLP + MCP
+</footer>
+
+</body>
+</html>
