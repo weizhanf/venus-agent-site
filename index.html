@@ -161,9 +161,28 @@ h2{font-size:clamp(28px,3.6vw,42px);font-weight:900;letter-spacing:-.02em;margin
 /* ─────────────── FINAL CTA ─────────────── */
 .final-cta{text-align:center;padding:120px 24px;position:relative;overflow:hidden}
 .final-cta::before{content:'';position:absolute;width:800px;height:800px;border-radius:50%;background:radial-gradient(circle,rgba(47,228,255,.06),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);z-index:0}
-.final-cta-inner{position:relative;z-index:1;max-width:760px;margin:0 auto}
+.final-cta-inner{position:relative;z-index:1;max-width:780px;margin:0 auto}
 .final-cta h2{margin-bottom:18px;background:linear-gradient(135deg,#fff,var(--c1) 60%,var(--c2));-webkit-background-clip:text;background-clip:text;color:transparent}
-.final-cta p{font-size:17px;color:var(--muted);margin-bottom:36px;line-height:1.6}
+.final-cta p{font-size:17px;color:var(--muted);margin-bottom:0;line-height:1.6}
+
+/* ─────────────── APPLY BOX ─────────────── */
+.apply-box{margin-top:48px;padding:36px;border-radius:20px;background:linear-gradient(135deg,var(--card2),var(--card));border:1px solid var(--border2);text-align:left;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.apply-label{display:block;font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--c1);margin-bottom:10px}
+.apply-email-row{display:flex;align-items:center;gap:12px;background:rgba(0,0,0,.4);border:1px solid var(--border);border-radius:10px;padding:14px 16px}
+@media(max-width:600px){.apply-email-row{flex-direction:column;align-items:stretch}}
+.apply-email-addr{flex:1;font-family:'JetBrains Mono','Consolas',monospace;font-size:16px;color:var(--c1);font-weight:700;word-break:break-all;background:none;padding:0;border:none}
+.apply-copy{padding:8px 18px;border:1px solid var(--border2);background:rgba(47,228,255,.06);color:var(--text);border-radius:8px;cursor:pointer;font-size:13px;font-weight:700;transition:.2s;font-family:inherit;white-space:nowrap}
+.apply-copy:hover{background:rgba(47,228,255,.12);border-color:var(--c1)}
+.apply-copy.copied{background:rgba(21,208,143,.15);border-color:var(--c4);color:var(--c4)}
+.apply-template{margin-top:28px}
+.apply-template-text{margin-top:10px;background:rgba(0,0,0,.4);border:1px solid var(--border);border-radius:10px;padding:18px 20px;font-family:'JetBrains Mono','Consolas',monospace;font-size:12.5px;line-height:1.85;color:var(--muted);white-space:pre-wrap;overflow-x:auto}
+.apply-template-text .lhi{color:var(--c1);font-weight:600}
+.apply-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px;justify-content:center}
+.apply-note{margin-top:28px;padding-top:20px;border-top:1px solid var(--border);font-size:12.5px;color:var(--dim);line-height:1.7;text-align:center}
+.apply-note strong{color:var(--c4)}
+
+/* ─────────────── COMING SOON BADGE ─────────────── */
+.coming-soon{display:inline-flex;align-items:center;gap:6px;padding:2px 8px;margin-left:6px;font-family:'JetBrains Mono','Consolas',monospace;font-size:10px;font-weight:700;letter-spacing:.05em;color:var(--c3);background:rgba(255,176,32,.1);border:1px solid rgba(255,176,32,.3);border-radius:4px;vertical-align:middle}
 
 /* ─────────────── FOOTER ─────────────── */
 footer{border-top:1px solid var(--border);padding:48px 24px 32px;background:var(--bg2)}
@@ -401,7 +420,7 @@ footer{border-top:1px solid var(--border);padding:48px 24px 32px;background:var(
         <div class="pi-icon">4</div>
         <div>
           <h4>开源审查</h4>
-          <p>核心 PII 引擎 <a href="https://github.com/weizhanf/venus-agent-site" style="color:var(--c1)">venus-pii</a> 在 GitHub 开源。你可以自己审查，也可以让你公司的安全团队审查。</p>
+          <p>核心 PII 引擎 <code style="color:var(--c1);font-family:'JetBrains Mono',monospace">venus-pii</code> 即将在 GitHub 开源（PyPI 同步发布）<span class="coming-soon">即将开源</span>。你可以自己审查，也可以让公司的安全团队审查。安全问题可发送至 <a href="mailto:security@venus-agent.com" style="color:var(--c1)">security@venus-agent.com</a>。</p>
         </div>
       </li>
     </ul>
@@ -497,7 +516,7 @@ footer{border-top:1px solid var(--border);padding:48px 24px 32px;background:var(
         <li>SLA 99.9% 保证</li>
         <li>定制功能开发</li>
       </ul>
-      <a href="mailto:zhangzhanyi0615@qq.com?subject=Venus%20Enterprise%20Inquiry" class="price-cta">联系销售</a>
+      <a href="mailto:sales@venus-agent.com?subject=Venus%20Enterprise%20Inquiry" class="price-cta">联系销售</a>
     </div>
   </div>
 </section>
@@ -541,15 +560,45 @@ footer{border-top:1px solid var(--border);padding:48px 24px 32px;background:var(
   </div>
 </section>
 
-<!-- ════════════════════ FINAL CTA ════════════════════ -->
+<!-- ════════════════════ FINAL CTA / APPLY ════════════════════ -->
 <section id="apply" class="final-cta">
   <div class="final-cta-inner">
     <div class="stitle">立即开始</div>
     <h2>前 100 名内测用户，¥99 永久授权</h2>
-    <p>把你最头疼的那份 Excel 发给我们。我们一对一帮你跑通第一次清洗，然后你决定是否付费。<br>没有套路。没有自动续费。没有信用卡绑定。</p>
-    <div class="cta-group" style="margin-bottom:0">
-      <a href="mailto:zhangzhanyi0615@qq.com?subject=Venus%20%E5%86%85%E6%B5%8B%E7%94%B3%E8%AF%B7&body=%E4%BD%A0%E5%A5%BD%EF%BC%8C%E6%88%91%E6%83%B3%E7%94%B3%E8%AF%B7%20Venus%20%E5%86%85%E6%B5%8B%E3%80%82%0A%0A%E6%88%91%E7%9A%84%E8%81%8C%E4%B8%9A%EF%BC%9A%0A%E6%88%91%E7%9A%84%E5%B8%B8%E7%94%A8%20Excel%20%E5%9C%BA%E6%99%AF%EF%BC%9A%0A%E6%88%91%E7%9A%84%20Telegram%20%2F%20%E5%BE%AE%E4%BF%A1%EF%BC%9A%0A%E6%88%91%E5%B8%8C%E6%9C%9B%E5%85%88%E8%AF%95%EF%BC%9AStarter%20%2F%20Professional" class="cta-primary">发邮件申请内测 →</a>
-      <a href="/venus.html" class="cta-secondary">先看技术架构</a>
+    <p>没有套路。没有自动续费。没有信用卡绑定。</p>
+
+    <div class="apply-box">
+      <div>
+        <span class="apply-label">发送申请到</span>
+        <div class="apply-email-row">
+          <code class="apply-email-addr" id="apply-email">apply@venus-agent.com</code>
+          <button class="apply-copy" onclick="copyEmail('apply@venus-agent.com', this)">复制邮箱</button>
+        </div>
+      </div>
+
+      <div class="apply-template">
+        <span class="apply-label">建议邮件模板</span>
+        <pre class="apply-template-text"><span class="lhi">主题：</span>Venus 内测申请
+
+你好，我想申请 Venus 内测。
+
+<span class="lhi">职业 / 行业：</span>
+<span class="lhi">日常 Excel 场景：</span>
+<span class="lhi">Telegram / 微信：</span>
+<span class="lhi">希望先试用的版本：</span>☐ Starter（¥99 终身）  ☐ Professional（¥299/年）
+
+期待回复。</pre>
+      </div>
+
+      <div class="apply-actions">
+        <a href="mailto:apply@venus-agent.com?subject=Venus%20内测申请" class="cta-primary">一键打开邮件 ↗</a>
+        <a href="/venus.html" class="cta-secondary">先看技术架构</a>
+      </div>
+
+      <div class="apply-note">
+        我们承诺 <strong>24 小时内人工回复</strong>。当前内测期间不开放自助购买，所有申请人工审核。<br>
+        企业咨询请发至 <a href="mailto:sales@venus-agent.com" style="color:var(--c1)">sales@venus-agent.com</a> · 一般问询 <a href="mailto:hello@venus-agent.com" style="color:var(--c1)">hello@venus-agent.com</a>
+      </div>
     </div>
   </div>
 </section>
@@ -570,16 +619,17 @@ footer{border-top:1px solid var(--border);padding:48px 24px 32px;background:var(
     </div>
     <div class="footer-col">
       <h5>资源</h5>
-      <a href="https://github.com/weizhanf/venus-agent-site">GitHub</a>
+      <a href="https://github.com/weizhanf/venus-pii">venus-pii (即将开源)</a>
       <a href="/dashboard/">Dashboard 预览</a>
+      <a href="/venus.html">技术架构</a>
       <a href="#faq">常见问题</a>
-      <a href="mailto:zhangzhanyi0615@qq.com">联系我们</a>
     </div>
     <div class="footer-col">
-      <h5>合规</h5>
-      <a href="#privacy">隐私政策</a>
-      <a href="#privacy">数据处理协议</a>
-      <a href="#privacy">服务条款</a>
+      <h5>联系</h5>
+      <a href="mailto:hello@venus-agent.com">hello@venus-agent.com</a>
+      <a href="mailto:support@venus-agent.com">support@venus-agent.com</a>
+      <a href="mailto:sales@venus-agent.com">sales@venus-agent.com</a>
+      <a href="mailto:privacy@venus-agent.com">privacy@venus-agent.com</a>
     </div>
   </div>
   <div class="footer-bot">
@@ -587,6 +637,36 @@ footer{border-top:1px solid var(--border);padding:48px 24px 32px;background:var(
     <div>Built with Polars · Pydantic V2 · HMAC-SHA256 · MCP</div>
   </div>
 </footer>
+
+<script>
+function copyEmail(email, btn) {
+  const setCopied = () => {
+    const orig = btn.textContent;
+    btn.textContent = '✓ 已复制';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = orig;
+      btn.classList.remove('copied');
+    }, 2000);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(email).then(setCopied).catch(() => fallback(email, setCopied));
+  } else {
+    fallback(email, setCopied);
+  }
+}
+function fallback(text, cb) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  try { document.execCommand('copy'); cb(); } catch(e) { alert('请手动复制：' + text); }
+  document.body.removeChild(ta);
+}
+</script>
 
 </body>
 </html>
