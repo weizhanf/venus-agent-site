@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Venus Labs 博客 — AI 数据处理、隐私保护、财务工具实战。来自一线创始人的笔记。">
+<title>Blog — Venus Labs</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#06101e;--bg2:#0a1729;--card:#0d1b30;--card2:#102240;--border:rgba(100,180,255,.12);--border2:rgba(100,180,255,.24);--c1:#2fe4ff;--c2:#a95cff;--c3:#ffb020;--c4:#15d08f;--red:#ff5a8c;--text:#e8f0ff;--muted:#8aa4c4;--dim:#5a7a9e}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--c1);text-decoration:none}
+
+nav{position:fixed;top:0;width:100%;z-index:100;background:rgba(6,16,30,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:14px 0}
+nav .inner{max-width:1180px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 24px}
+nav .logo{font-size:22px;font-weight:900;background:linear-gradient(90deg,var(--c1),var(--c2));-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:-.02em}
+nav .links{display:flex;gap:28px;font-size:14px;color:var(--muted);align-items:center}
+nav .links a{color:var(--muted);transition:.2s}
+nav .links a:hover{color:var(--c1)}
+nav .links a.active{color:var(--c1)}
+nav .cta-btn{padding:8px 18px;border-radius:8px;background:linear-gradient(135deg,var(--c1),var(--c2));color:#06101e;font-weight:800;font-size:13px}
+@media(max-width:780px){nav .links a:not(.cta-btn):not(.logo){display:none}}
+
+.hero{padding:160px 24px 60px;text-align:center;max-width:880px;margin:0 auto;position:relative}
+.hero::before{content:'';position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(47,228,255,.08),transparent 70%);top:-100px;left:50%;transform:translateX(-50%);z-index:0}
+.hero-inner{position:relative;z-index:1}
+.kicker{display:inline-block;font-size:13px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--c1);margin-bottom:14px}
+.hero h1{font-size:clamp(36px,5vw,56px);font-weight:900;letter-spacing:-.03em;line-height:1.1;background:linear-gradient(135deg,#fff,var(--c1) 60%,var(--c2));-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:18px}
+.hero p{font-size:17px;color:var(--muted);max-width:620px;margin:0 auto;line-height:1.6}
+
+.list{max-width:880px;margin:0 auto;padding:60px 24px 120px}
+.post{padding:36px 32px;border-radius:18px;background:var(--card);border:1px solid var(--border);margin-bottom:20px;transition:.3s;display:block}
+.post:hover{transform:translateY(-3px);border-color:var(--border2);box-shadow:0 12px 40px rgba(0,0,0,.3)}
+.post-meta{display:flex;gap:16px;align-items:center;font-size:12px;color:var(--dim);margin-bottom:14px;font-family:'JetBrains Mono','Consolas',monospace}
+.post-tag{padding:3px 10px;border-radius:6px;background:rgba(47,228,255,.08);border:1px solid rgba(47,228,255,.2);color:var(--c1);font-size:11px;font-weight:700;letter-spacing:.05em}
+.post h2{font-size:24px;font-weight:800;color:var(--text);margin-bottom:12px;line-height:1.3;letter-spacing:-.01em}
+.post-excerpt{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:16px}
+.post-read{font-size:13px;color:var(--c1);font-weight:700;display:inline-flex;align-items:center;gap:6px}
+.post-read::after{content:'→';transition:.2s}
+.post:hover .post-read::after{transform:translateX(4px)}
+
+.empty-future{padding:36px;border-radius:18px;border:1px dashed var(--border);text-align:center;color:var(--dim);font-size:13px;line-height:1.7}
+
+footer{border-top:1px solid var(--border);padding:48px 24px 32px;background:var(--bg2);text-align:center;color:var(--dim);font-size:13px}
+footer a{color:var(--muted)}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="inner">
+    <a href="/" class="logo">VENUS</a>
+    <div class="links">
+      <a href="/#why">为什么</a>
+      <a href="/#how">怎么用</a>
+      <a href="/#pricing">价格</a>
+      <a href="/blog/" class="active">Blog</a>
+      <a href="/venus.html">技术架构</a>
+      <a href="/#apply" class="cta-btn">申请内测</a>
+    </div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <span class="kicker">Venus Labs · Field Notes</span>
+    <h1>来自一线的笔记</h1>
+    <p>关于 AI 数据处理、隐私保护、财务工具的实战经验。我们写的是真做出来的东西，不是 PPT。</p>
+  </div>
+</div>
+
+<div class="list">
+  <a href="/blog/finance-excel-ai-tutorial.html" class="post">
+    <div class="post-meta">
+      <span class="post-tag">FINANCE TUTORIAL</span>
+      <span>2026-05-10</span>
+      <span>· 12 分钟阅读</span>
+    </div>
+    <h2>财务人不该再加班清洗 Excel：用 AI 30 秒搞定一份 5000 行脏表（附隐私保护方案）</h2>
+    <p class="post-excerpt">上个月我加班 4 天清洗一份 8000 行的 SAP 导出表。后来我意识到：AI 工具不是不能用，是大家都用错了地方。这篇文章告诉你如何用对工具——同时让你的客户名单、薪资表永远不会泄露给 ChatGPT。</p>
+    <span class="post-read">阅读全文</span>
+  </a>
+
+  <div class="empty-future">
+    更多文章正在路上 — 涵盖 AI 编程工具配置、隐私合规实战、财务自动化案例。<br>
+    欢迎订阅：<a href="mailto:admin@venus-agent.com?subject=[Subscribe]">admin@venus-agent.com</a>
+  </div>
+</div>
+
+<footer>
+  © 2026 Venus Labs · <a href="/">主页</a> · <a href="/venus.html">技术架构</a> · <a href="https://github.com/weizhanf/venus-pii" target="_blank">venus-pii on GitHub</a>
+</footer>
+
+</body>
+</html>
