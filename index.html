@@ -6,6 +6,37 @@
 <meta name="description" content="Venus — 给财务、审计、税务从业者的 AI Excel 数据清洗工具。数据全程本地处理，HMAC 加密，永不离开你的电脑。">
 <meta name="keywords" content="AI Excel 清洗,财务数据,隐私 AI,本地 AI,数据脱敏,HMAC,会计工具">
 <title>Venus — AI 数据清洗，数据永不离开你的电脑</title>
+<link rel="canonical" href="https://venus-agent.com/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Venus">
+<meta property="og:title" content="Venus — AI 数据清洗，数据永不离开你的电脑">
+<meta property="og:description" content="为财务、审计、税务从业者设计的 AI Excel 数据清洗工具。数据全程本地处理，HMAC-SHA256 加密脱敏，永不离开你的电脑。">
+<meta property="og:url" content="https://venus-agent.com/">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Venus — AI 数据清洗，数据永不离开你的电脑">
+<meta name="twitter:description" content="为财务、审计、税务从业者设计的 AI Excel 数据清洗工具。HMAC-SHA256 脱敏保护隐私，数据永不上传。">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Venus",
+  "description": "为财务、审计、税务从业者设计的 AI Excel 数据清洗工具，数据全程本地处理，HMAC-SHA256 脱敏保护隐私。",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Windows",
+  "offers": {
+    "@type": "Offer",
+    "price": "99",
+    "priceCurrency": "CNY"
+  },
+  "url": "https://venus-agent.com/",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Venus Labs",
+    "url": "https://venus-agent.com"
+  }
+}
+</script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -27,7 +58,16 @@ nav .links a{color:var(--muted);transition:.2s}
 nav .links a:hover{color:var(--c1)}
 nav .cta-btn{padding:8px 18px;border-radius:8px;background:linear-gradient(135deg,var(--c1),var(--c2));color:#06101e;font-weight:800;font-size:13px;letter-spacing:.02em}
 nav .cta-btn:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(47,228,255,.25)}
-@media(max-width:780px){nav .links a:not(.cta-btn){display:none}}
+.nav-toggle{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px}
+.nav-toggle span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px;transition:.2s}
+@media(max-width:780px){
+  .nav-toggle{display:flex}
+  nav .inner{flex-wrap:wrap;position:relative}
+  nav .links{display:none;width:100%;flex-direction:column;gap:0;padding:12px 0 16px}
+  nav .links.open{display:flex}
+  nav .links a{padding:10px 4px;display:block;border-bottom:1px solid var(--border)}
+  nav .links a.cta-btn{margin-top:12px;display:inline-block;align-self:flex-start;padding:10px 20px}
+}
 
 /* ─────────────── HERO ─────────────── */
 .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:140px 24px 80px;position:relative;overflow:hidden}
@@ -202,6 +242,7 @@ footer{border-top:1px solid var(--border);padding:48px 24px 32px;background:var(
 <nav>
   <div class="inner">
     <a href="/" class="logo">VENUS</a>
+    <button class="nav-toggle" onclick="this.closest('nav').querySelector('.links').classList.toggle('open')" aria-label="展开菜单"><span></span><span></span><span></span></button>
     <div class="links">
       <a href="#why">为什么</a>
       <a href="#how">怎么用</a>
@@ -420,7 +461,7 @@ footer{border-top:1px solid var(--border);padding:48px 24px 32px;background:var(
         <div class="pi-icon">4</div>
         <div>
           <h4>开源审查</h4>
-          <p>核心 PII 引擎 <a href="https://github.com/weizhanf/venus-pii" style="color:var(--c1);font-family:'JetBrains Mono',monospace" target="_blank">venus-pii</a> 已在 GitHub 开源，遵循 MIT 协议。你可以自己审查，也可以让公司的安全团队审查。安全问题或合作请发送至 <a href="mailto:admin@venus-agent.com" style="color:var(--c1)">admin@venus-agent.com</a>。</p>
+          <p>核心 PII 引擎 <a href="https://github.com/weizhanf/venus-pii" style="color:var(--c1);font-family:'JetBrains Mono',monospace" target="_blank" rel="noopener noreferrer">venus-pii</a> 已在 GitHub 开源，遵循 MIT 协议。你可以自己审查，也可以让公司的安全团队审查。安全问题或合作请发送至 <a href="mailto:admin@venus-agent.com" style="color:var(--c1)">admin@venus-agent.com</a>。</p>
         </div>
       </li>
     </ul>
@@ -619,7 +660,7 @@ footer{border-top:1px solid var(--border);padding:48px 24px 32px;background:var(
     </div>
     <div class="footer-col">
       <h5>资源</h5>
-      <a href="https://github.com/weizhanf/venus-pii" target="_blank">venus-pii on GitHub ↗</a>
+      <a href="https://github.com/weizhanf/venus-pii" target="_blank" rel="noopener noreferrer">venus-pii on GitHub ↗</a>
       <a href="/dashboard/">Dashboard 预览</a>
       <a href="/venus.html">技术架构</a>
       <a href="#faq">常见问题</a>
