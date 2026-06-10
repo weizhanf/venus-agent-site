@@ -9,6 +9,12 @@
 <meta property="og:description" content="上个月我加班 4 天清洗一份 SAP 导出表。后来我意识到：AI 工具不是不能用，是大家用错了地方。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://venus-agent.com/blog/finance-excel-ai-tutorial.html">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-05-10">
+<link rel="canonical" href="https://venus-agent.com/blog/finance-excel-ai-tutorial.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="财务人不该再加班清洗 Excel：AI 30 秒搞定 5000 行脏表">
+<meta name="twitter:description" content="加班 4 天清洗 SAP 导出表？这篇文章教你用 AI 30 秒搞定，同时用 HMAC 脱敏保护客户数据。">
 <title>财务人不该再加班清洗 Excel：用 AI 30 秒搞定 5000 行脏表 | Venus Labs</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -25,7 +31,16 @@ nav .links{display:flex;gap:28px;font-size:14px;color:var(--muted);align-items:c
 nav .links a{color:var(--muted);transition:.2s;border:none}
 nav .links a:hover{color:var(--c1)}
 nav .cta-btn{padding:8px 18px;border-radius:8px;background:linear-gradient(135deg,var(--c1),var(--c2));color:#06101e;font-weight:800;font-size:13px;border:none}
-@media(max-width:780px){nav .links a:not(.cta-btn):not(.logo){display:none}}
+.nav-toggle{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px}
+.nav-toggle span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px;transition:.2s}
+@media(max-width:780px){
+  .nav-toggle{display:flex}
+  nav .inner{flex-wrap:wrap;position:relative}
+  nav .links{display:none;width:100%;flex-direction:column;gap:0;padding:12px 0 16px}
+  nav .links.open{display:flex}
+  nav .links a{padding:10px 4px;display:block;border-bottom:1px solid var(--border)}
+  nav .links a.cta-btn{margin-top:12px;display:inline-block;align-self:flex-start;padding:10px 20px}
+}
 
 .article-header{padding:140px 24px 50px;max-width:780px;margin:0 auto;position:relative}
 .article-header::before{content:'';position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(47,228,255,.06),transparent 70%);top:0;right:-100px;z-index:0}
@@ -105,10 +120,12 @@ footer a{color:var(--muted);border:none}
 <nav>
   <div class="inner">
     <a href="/" class="logo">VENUS</a>
+    <button class="nav-toggle" onclick="this.closest('nav').querySelector('.links').classList.toggle('open')" aria-label="展开菜单"><span></span><span></span><span></span></button>
     <div class="links">
+      <a href="/#why">为什么</a>
+      <a href="/#pricing">价格</a>
       <a href="/blog/">Blog</a>
       <a href="/venus.html">技术架构</a>
-      <a href="/#pricing">价格</a>
       <a href="/#apply" class="cta-btn">申请内测</a>
     </div>
   </div>
@@ -367,7 +384,7 @@ footer a{color:var(--muted);border:none}
 
 <h3>问：Venus 真的不上传我的数据吗？</h3>
 
-<p>核心引擎 100% 在你本地运行。我们提供"完全本地模式"——这种模式下 Venus 不发任何网络请求。如果你启用 AI 路径（更智能但需要联网），数据会先经过本地 PII 脱敏才发给 LLM。我们的核心 PII 引擎 <a href="https://github.com/weizhanf/venus-pii" target="_blank">venus-pii</a> 已在 GitHub 完全开源（MIT 协议），代码量小，你的公司安全团队可以独立审查。</p>
+<p>核心引擎 100% 在你本地运行。我们提供"完全本地模式"——这种模式下 Venus 不发任何网络请求。如果你启用 AI 路径（更智能但需要联网），数据会先经过本地 PII 脱敏才发给 LLM。我们的核心 PII 引擎 <a href="https://github.com/weizhanf/venus-pii" target="_blank" rel="noopener noreferrer">venus-pii</a> 已在 GitHub 完全开源（MIT 协议），代码量小，你的公司安全团队可以独立审查。</p>
 
 <h3>问：和直接用 ChatGPT 处理 Excel 有什么区别？</h3>
 
@@ -399,11 +416,11 @@ footer a{color:var(--muted);border:none}
 
 <div class="author-card">
   <h4>关于 Venus Labs</h4>
-  <p>我们是一个研究<strong>AI 时代隐私基础设施</strong>的小团队。我们相信 AI 应该是放大人能力的工具，而不是吞噬隐私的黑洞。核心 PII 引擎 <a href="https://github.com/weizhanf/venus-pii" target="_blank">venus-pii</a> 已完全开源。<br><br>问询、合作、安全报告：<a href="mailto:admin@venus-agent.com">admin@venus-agent.com</a></p>
+  <p>我们是一个研究<strong>AI 时代隐私基础设施</strong>的小团队。我们相信 AI 应该是放大人能力的工具，而不是吞噬隐私的黑洞。核心 PII 引擎 <a href="https://github.com/weizhanf/venus-pii" target="_blank" rel="noopener noreferrer">venus-pii</a> 已完全开源。<br><br>问询、合作、安全报告：<a href="mailto:admin@venus-agent.com">admin@venus-agent.com</a></p>
 </div>
 
 <footer>
-  © 2026 Venus Labs · <a href="/">主页</a> · <a href="/blog/">Blog</a> · <a href="/venus.html">技术架构</a> · <a href="https://github.com/weizhanf/venus-pii" target="_blank">venus-pii</a>
+  © 2026 Venus Labs · <a href="/">主页</a> · <a href="/blog/">Blog</a> · <a href="/venus.html">技术架构</a> · <a href="https://github.com/weizhanf/venus-pii" target="_blank" rel="noopener noreferrer">venus-pii</a>
 </footer>
 
 </body>

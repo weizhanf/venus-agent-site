@@ -4,7 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Venus Labs 博客 — AI 数据处理、隐私保护、财务工具实战。来自一线创始人的笔记。">
-<title>Blog — Venus Labs</title>
+<title>Blog — Venus Labs · AI 数据处理与隐私保护实战</title>
+<link rel="canonical" href="https://venus-agent.com/blog/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Venus">
+<meta property="og:title" content="Blog — Venus Labs · AI 数据处理与隐私保护实战">
+<meta property="og:description" content="来自一线的笔记：关于 AI 数据处理、隐私保护、财务工具的实战经验。真做出来的东西，不是 PPT。">
+<meta property="og:url" content="https://venus-agent.com/blog/">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Blog — Venus Labs · AI 数据处理与隐私保护实战">
+<meta name="twitter:description" content="关于 AI 数据处理、隐私保护、财务工具的实战经验。来自 Venus Labs 创始人的一线笔记。">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#06101e;--bg2:#0a1729;--card:#0d1b30;--card2:#102240;--border:rgba(100,180,255,.12);--border2:rgba(100,180,255,.24);--c1:#2fe4ff;--c2:#a95cff;--c3:#ffb020;--c4:#15d08f;--red:#ff5a8c;--text:#e8f0ff;--muted:#8aa4c4;--dim:#5a7a9e}
@@ -20,7 +30,16 @@ nav .links a{color:var(--muted);transition:.2s}
 nav .links a:hover{color:var(--c1)}
 nav .links a.active{color:var(--c1)}
 nav .cta-btn{padding:8px 18px;border-radius:8px;background:linear-gradient(135deg,var(--c1),var(--c2));color:#06101e;font-weight:800;font-size:13px}
-@media(max-width:780px){nav .links a:not(.cta-btn):not(.logo){display:none}}
+.nav-toggle{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px}
+.nav-toggle span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px;transition:.2s}
+@media(max-width:780px){
+  .nav-toggle{display:flex}
+  nav .inner{flex-wrap:wrap;position:relative}
+  nav .links{display:none;width:100%;flex-direction:column;gap:0;padding:12px 0 16px}
+  nav .links.open{display:flex}
+  nav .links a{padding:10px 4px;display:block;border-bottom:1px solid var(--border)}
+  nav .links a.cta-btn{margin-top:12px;display:inline-block;align-self:flex-start;padding:10px 20px}
+}
 
 .hero{padding:160px 24px 60px;text-align:center;max-width:880px;margin:0 auto;position:relative}
 .hero::before{content:'';position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(47,228,255,.08),transparent 70%);top:-100px;left:50%;transform:translateX(-50%);z-index:0}
@@ -51,6 +70,7 @@ footer a{color:var(--muted)}
 <nav>
   <div class="inner">
     <a href="/" class="logo">VENUS</a>
+    <button class="nav-toggle" onclick="this.closest('nav').querySelector('.links').classList.toggle('open')" aria-label="展开菜单"><span></span><span></span><span></span></button>
     <div class="links">
       <a href="/#why">为什么</a>
       <a href="/#how">怎么用</a>
@@ -82,14 +102,25 @@ footer a{color:var(--muted)}
     <span class="post-read">阅读全文</span>
   </a>
 
+  <a href="/blog/why-audit-trail-matters.html" class="post">
+    <div class="post-meta">
+      <span class="post-tag">AUDIT &amp; COMPLIANCE</span>
+      <span>2026-06-10</span>
+      <span>· 10 分钟阅读</span>
+    </div>
+    <h2>当 AI 改了你的表格，你能证明它没出错吗？—— 哈希链审计日志实战</h2>
+    <p class="post-excerpt">一份 Excel 被 AI 修改了 23 处。审计师问：哪些改了？为什么改？谁批准的？大多数 AI 工具答不上来。这篇文章解释哈希链如何让每一步修改都有不可篡改的证据——以及它在年度审计、内控合规、数据争议中的实际价值。</p>
+    <span class="post-read">阅读全文</span>
+  </a>
+
   <div class="empty-future">
-    更多文章正在路上 — 涵盖 AI 编程工具配置、隐私合规实战、财务自动化案例。<br>
-    欢迎订阅：<a href="mailto:admin@venus-agent.com?subject=[Subscribe]">admin@venus-agent.com</a>
+    更多文章正在路上 — 涵盖隐私合规实战、财务自动化案例、AI 工具选型指南。<br>
+    欢迎订阅通知：<a href="mailto:admin@venus-agent.com?subject=[Subscribe]">admin@venus-agent.com</a>
   </div>
 </div>
 
 <footer>
-  © 2026 Venus Labs · <a href="/">主页</a> · <a href="/venus.html">技术架构</a> · <a href="https://github.com/weizhanf/venus-pii" target="_blank">venus-pii on GitHub</a>
+  © 2026 Venus Labs · <a href="/">主页</a> · <a href="/venus.html">技术架构</a> · <a href="https://github.com/weizhanf/venus-pii" target="_blank" rel="noopener noreferrer">venus-pii on GitHub</a>
 </footer>
 
 </body>

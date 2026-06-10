@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>404 — 页面不存在 · Venus</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#06101e;--bg2:#0a1729;--card:#0d1b30;--card2:#102240;
+  --border:rgba(100,180,255,.12);--border2:rgba(100,180,255,.24);
+  --c1:#2fe4ff;--c2:#a95cff;--c3:#ffb020;--c4:#15d08f;--red:#ff5a8c;
+  --text:#e8f0ff;--muted:#8aa4c4;--dim:#5a7a9e;
+}
+html,body{height:100%}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column}
+a{color:var(--c1);text-decoration:none}
+
+nav{position:fixed;top:0;width:100%;z-index:100;background:rgba(6,16,30,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:14px 0}
+nav .inner{max-width:1180px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 24px}
+nav .logo{font-size:22px;font-weight:900;background:linear-gradient(90deg,var(--c1),var(--c2));-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:-.02em}
+nav .links{display:flex;gap:28px;font-size:14px;color:var(--muted);align-items:center}
+nav .links a{color:var(--muted);transition:.2s}
+nav .links a:hover{color:var(--c1)}
+nav .cta-btn{padding:8px 18px;border-radius:8px;background:linear-gradient(135deg,var(--c1),var(--c2));color:#06101e;font-weight:800;font-size:13px}
+@media(max-width:780px){nav .links a:not(.cta-btn){display:none}}
+
+.main{flex:1;display:flex;align-items:center;justify-content:center;text-align:center;padding:80px 24px;position:relative;overflow:hidden}
+.main::before{content:'';position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(255,90,140,.07),transparent 70%);top:-100px;left:50%;transform:translateX(-50%)}
+.main::after{content:'';position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(169,92,255,.06),transparent 70%);bottom:-50px;right:-50px}
+
+.inner-404{position:relative;z-index:2;max-width:680px}
+
+.code-tag{font-family:'JetBrains Mono','Consolas',monospace;font-size:13px;color:var(--red);font-weight:700;letter-spacing:.15em;margin-bottom:16px;display:inline-block;padding:6px 14px;border:1px solid rgba(255,90,140,.3);border-radius:8px;background:rgba(255,90,140,.06)}
+
+h1{font-size:clamp(40px,7vw,80px);font-weight:900;letter-spacing:-.04em;line-height:1;margin-bottom:16px;background:linear-gradient(135deg,#fff 20%,var(--red) 70%,var(--c2));-webkit-background-clip:text;background-clip:text;color:transparent}
+
+.pii-label{display:inline-block;font-family:'JetBrains Mono','Consolas',monospace;font-size:22px;font-weight:800;color:var(--c2);letter-spacing:.05em;margin-bottom:24px}
+
+p{font-size:17px;color:var(--muted);max-width:520px;margin:0 auto 40px;line-height:1.6}
+p strong{color:var(--text)}
+
+.nav-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:32px}
+@media(max-width:480px){.nav-grid{grid-template-columns:1fr}}
+
+.nav-card{padding:20px 22px;border-radius:14px;background:var(--card);border:1px solid var(--border);text-align:left;display:flex;gap:14px;align-items:flex-start;transition:.3s;color:var(--text)}
+.nav-card:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.nav-card .icon{font-size:22px;flex-shrink:0;margin-top:2px}
+.nav-card h3{font-size:15px;font-weight:800;margin-bottom:4px}
+.nav-card p{font-size:13px;color:var(--muted);margin:0;line-height:1.4}
+
+.cta-primary{padding:14px 28px;border-radius:12px;background:linear-gradient(135deg,var(--c1),var(--c2));color:#06101e;font-weight:800;font-size:15px;display:inline-flex;align-items:center;gap:10px;transition:.3s;box-shadow:0 4px 20px rgba(47,228,255,.2)}
+.cta-primary:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(47,228,255,.4)}
+
+.code-hint{margin-top:32px;font-family:'JetBrains Mono','Consolas',monospace;font-size:12px;color:var(--dim);background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:8px;padding:12px 16px;text-align:left;max-width:480px;margin-left:auto;margin-right:auto}
+.code-hint .kw{color:var(--c1)}
+.code-hint .str{color:var(--c4)}
+.code-hint .cm{color:var(--dim)}
+
+footer{border-top:1px solid var(--border);padding:24px;background:var(--bg2);text-align:center;font-size:12px;color:var(--dim)}
+footer a{color:var(--muted)}footer a:hover{color:var(--c1)}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="inner">
+    <a href="/" class="logo">VENUS</a>
+    <div class="links">
+      <a href="/#why">为什么</a>
+      <a href="/#how">怎么用</a>
+      <a href="/#pricing">价格</a>
+      <a href="/blog/">Blog</a>
+      <a href="/venus.html">技术架构</a>
+      <a href="/#apply" class="cta-btn">申请内测</a>
+    </div>
+  </div>
+</nav>
+
+<main class="main">
+  <div class="inner-404">
+    <div class="code-tag">STATUS: 404</div>
+    <h1>404</h1>
+    <div class="pii-label">PAGE_[BLOCKED]</div>
+    <p>你访问的页面不存在，或已被移动。<br>别担心——<strong>你的数据依然安全</strong>，只是这个 URL 被 PII 脱敏了。</p>
+
+    <div class="nav-grid">
+      <a href="/" class="nav-card">
+        <div class="icon">🏠</div>
+        <div>
+          <h3>回到主页</h3>
+          <p>了解 Venus 如何为财务从业者保护数据</p>
+        </div>
+      </a>
+      <a href="/venus.html" class="nav-card">
+        <div class="icon">⚙️</div>
+        <div>
+          <h3>技术架构</h3>
+          <p>5 阶段白盒流水线 · HMAC-SHA256 · 哈希链</p>
+        </div>
+      </a>
+      <a href="/dashboard/" class="nav-card">
+        <div class="icon">🚀</div>
+        <div>
+          <h3>Dashboard 演示</h3>
+          <p>直接运行 Agent 流水线，无需注册</p>
+        </div>
+      </a>
+      <a href="/blog/" class="nav-card">
+        <div class="icon">📝</div>
+        <div>
+          <h3>Blog</h3>
+          <p>AI 数据处理 · 隐私保护 · 财务实战</p>
+        </div>
+      </a>
+    </div>
+
+    <a href="/#apply" class="cta-primary">申请内测 →</a>
+
+    <div class="code-hint">
+      <span class="cm">// 系统日志</span><br>
+      <span class="kw">try</span> { route(<span class="str">"你请求的路径"</span>) }<br>
+      <span class="kw">catch</span> (NotFound e) {<br>
+      &nbsp;&nbsp;redirect(<span class="str">"/404.html"</span>)<span class="cm"> // 你在这里</span><br>
+      }
+    </div>
+  </div>
+</main>
+
+<footer>
+  © 2026 Venus Labs · <a href="/">主页</a> · <a href="/venus.html">技术架构</a> · <a href="https://github.com/weizhanf/venus-pii" target="_blank" rel="noopener noreferrer">venus-pii on GitHub</a>
+</footer>
+
+</body>
+</html>

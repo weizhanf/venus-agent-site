@@ -3,7 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Venus — 断臂维纳斯 AI 数据引擎</title>
+<title>Venus 技术架构 — 五阶段白盒数据流 · HMAC-SHA256 · 哈希链审计</title>
+<meta name="description" content="Venus AI 数据处理引擎的完整技术架构：五阶段白盒数据流、HMAC-SHA256 PII 脱敏、SHA-256 哈希链审计、Pydantic V2 契约验证、AST 沙箱执行。">
+<link rel="canonical" href="https://venus-agent.com/venus.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Venus">
+<meta property="og:title" content="Venus 技术架构 — 五阶段白盒数据流引擎">
+<meta property="og:description" content="完整技术架构详解：HMAC-SHA256 PII 脱敏 · SHA-256 哈希链审计 · Pydantic V2 契约 · AST 沙箱 · MCP 生态 · 规则引擎零 LLM 快速路径。">
+<meta property="og:url" content="https://venus-agent.com/venus.html">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Venus 技术架构 — 五阶段白盒数据流引擎">
+<meta name="twitter:description" content="HMAC-SHA256 脱敏 · 哈希链审计 · 规则引擎 0.09s · 84% Token 节省">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#06101e;--card:#0d1b30;--border:rgba(100,180,255,.12);--c1:#2fe4ff;--c2:#a95cff;--c3:#ffb020;--c4:#15d08f;--red:#ff5a8c;--text:#e8f0ff;--muted:#8aa4c4}
@@ -14,9 +25,22 @@ a{color:var(--c1);text-decoration:none}
 /* Nav */
 nav{position:fixed;top:0;width:100%;z-index:100;background:rgba(6,16,30,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:14px 0}
 nav .inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 24px}
-nav .logo{font-size:20px;font-weight:900;background:linear-gradient(90deg,var(--c1),var(--c2));-webkit-background-clip:text;background-clip:text;color:transparent}
-nav .links{display:flex;gap:24px;font-size:14px;color:var(--muted)}
+nav .logo{font-size:20px;font-weight:900;background:linear-gradient(90deg,var(--c1),var(--c2));-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:-.02em}
+nav .links{display:flex;gap:24px;font-size:14px;color:var(--muted);align-items:center}
+nav .links a{color:var(--muted);transition:.2s}
 nav .links a:hover{color:var(--c1)}
+nav .cta-btn{padding:8px 18px;border-radius:8px;background:linear-gradient(135deg,var(--c1),var(--c2));color:#06101e;font-weight:800;font-size:13px;letter-spacing:.02em}
+nav .cta-btn:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(47,228,255,.25)}
+.nav-toggle{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px}
+.nav-toggle span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px;transition:.2s}
+@media(max-width:780px){
+  .nav-toggle{display:flex}
+  nav .inner{flex-wrap:wrap;position:relative}
+  nav .links{display:none;width:100%;flex-direction:column;gap:0;padding:12px 0 16px}
+  nav .links.open{display:flex}
+  nav .links a{padding:10px 4px;display:block;border-bottom:1px solid var(--border)}
+  nav .links a.cta-btn{margin-top:12px;display:inline-block;align-self:flex-start;padding:10px 20px}
+}
 
 /* Hero */
 .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:120px 24px 80px;position:relative;overflow:hidden}
@@ -118,14 +142,15 @@ footer{text-align:center;padding:60px 24px;color:#4a6580;font-size:13px;border-t
 
 <nav>
 <div class="inner">
-  <div class="logo">VENUS</div>
+  <a href="/" class="logo">VENUS</a>
+  <button class="nav-toggle" onclick="this.closest('nav').querySelector('.links').classList.toggle('open')" aria-label="展开菜单"><span></span><span></span><span></span></button>
   <div class="links">
-    <a href="#pipeline">Pipeline</a>
-    <a href="#security">Security</a>
-    <a href="#pii">Privacy</a>
-    <a href="#chain">Audit</a>
-    <a href="#mcp">Ecosystem</a>
-    <a href="#metrics">Metrics</a>
+    <a href="/#why">为什么</a>
+    <a href="/#pricing">价格</a>
+    <a href="/blog/">Blog</a>
+    <a href="/venus.html">技术架构</a>
+    <a href="/dashboard/">Dashboard</a>
+    <a href="/#apply" class="cta-btn">申请内测</a>
   </div>
 </div>
 </nav>

@@ -341,6 +341,38 @@ const MOCK_DEMOS = {
       ['10005', '云峰科技', '数据中台', '215,000', '2026-03-22'],
     ],
     isRuleEngine: true,
+  },
+  audit: {
+    filename: 'financial_report_Q4_2025.xlsx',
+    instruction: '对比 Q3 和 Q4 季报数据，检测异常变动并标记超过 ±15% 的科目',
+    rows: 3200,
+    schema: [
+      { name: '科目编码', dtype: 'text', ratio: 1.0 },
+      { name: '科目名称', dtype: 'text', ratio: 1.0 },
+      { name: 'Q3金额', dtype: 'float', ratio: 0.97 },
+      { name: 'Q4金额', dtype: 'float', ratio: 0.94 },
+      { name: '环比变动', dtype: 'float', ratio: 0.0 },
+    ],
+    radar: [
+      { severity: '🔴', col: 'Q4金额', desc: '发现 192 个空值 (6%)，疑似未结账科目' },
+      { severity: '🔴', col: '环比变动', desc: '字段为空，需计算：(Q4-Q3)/Q3×100%' },
+      { severity: '🟡', col: 'Q3金额', desc: '发现 98 个空值 (3%)' },
+      { severity: '🔵', col: '科目编码', desc: '检测到 14 行格式不一致（缺前缀 0）' },
+    ],
+    zasa: { intent: 'DATA_ANALYZE', compiled: 'fill_missing(Q3金额, Q4金额, method=zero) → write_column(环比变动, expr="(Q4金额-Q3金额)/Q3金额*100") → flag_rows(abs(环比变动)>15, label="⚠ 异常变动")' },
+    ops: [
+      { type: 'FILL_MISSING', target: 'Q3金额 / Q4金额', affected: 290, code: 'df[["Q3金额","Q4金额"]].fill_null(0)' },
+      { type: 'WRITE_COLUMN', target: '环比变动', affected: 3200, code: 'df["环比变动"] = ((df["Q4金额"]-df["Q3金额"])/df["Q3金额"]*100).round(2)' },
+      { type: 'WRITE_COLUMN', target: '异常标记', affected: 347, code: 'df["异常标记"] = df["环比变动"].abs().map(lambda x: "⚠ 异常" if x>15 else "正常")' },
+    ],
+    resultPreview: [
+      ['1001', '主营业务收入', '8,240,000', '9,650,000', '+17.1%'],
+      ['1002', '主营业务成本', '5,120,000', '6,100,000', '+19.1%'],
+      ['2001', '销售费用', '380,000', '290,000', '-23.7%'],
+      ['2002', '管理费用', '210,000', '215,000', '+2.4%'],
+      ['3001', '财务费用', '45,000', '—', '—'],
+    ],
+    isAuditMode: true,
   }
 };
 
@@ -637,7 +669,19 @@ function init() {
     if (backendOnline && isRealFile) {
       runRealPipeline();
     } else {
-      runMockPipeline('clean');
+      const instr = ($('#instruction-input').value || '').toLowerCase();
+      let demoKey = 'clean';
+      if (instr.includes('pii') || instr.includes('脱敏') || instr.includes('隐私') ||
+          instr.includes('身份') || instr.includes('手机') || instr.includes('姓名')) {
+        demoKey = 'pii';
+      } else if (instr.includes('重复') || instr.includes('去重') || instr.includes('deduplicate') ||
+                 instr.includes('duplicate')) {
+        demoKey = 'rule';
+      } else if (instr.includes('对比') || instr.includes('季') || instr.includes('异常') ||
+                 instr.includes('审计') || instr.includes('变动') || instr.includes('audit')) {
+        demoKey = 'audit';
+      }
+      runMockPipeline(demoKey);
     }
   });
 
@@ -661,9 +705,26 @@ function init() {
     });
   }
 
-  // Download button
+  // Download button — Mock 模式生成示例 CSV
   $('#download-btn').addEventListener('click', () => {
-    addAuditLog('info', '📥 下载功能需连接后端引擎');
+    const demo = Object.values(MOCK_DEMOS).find(d =>
+      $('#file-name').textContent === d.filename
+    );
+    if (!demo) {
+      addAuditLog('info', '📥 下载功能需连接后端引擎');
+      return;
+    }
+    const headers = demo.schema.map(c => c.name);
+    const rows = demo.resultPreview;
+    const csvContent = [headers.join(','), ...rows.map(r => r.map(c => `"${c}"`).join(','))].join('\n');
+    const blob = new Blob(['﻿' + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'venus_result_preview.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+    addAuditLog('success', '📥 示例结果已下载（前 5 行预览）');
   });
 }
 
